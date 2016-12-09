@@ -28,6 +28,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 #include "color_ramp.h"
+#include "core_string_names.h"
 
 //setter and getter names for property serialization
 #define COLOR_RAMP_GET_OFFSETS "get_offsets"
@@ -97,6 +98,7 @@ void ColorRamp::set_offsets(const Vector<float> &p_offsets) {
 		points[i].offset = p_offsets[i];
 	}
 	is_sorted = false;
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 void ColorRamp::set_colors(const Vector<Color> &p_colors) {
@@ -106,6 +108,7 @@ void ColorRamp::set_colors(const Vector<Color> &p_colors) {
 	for (int i = 0; i < points.size(); i++) {
 		points[i].color = p_colors[i];
 	}
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 Vector<ColorRamp::Point> &ColorRamp::get_points() {
@@ -119,6 +122,7 @@ void ColorRamp::add_point(float p_offset, const Color &p_color) {
 	p.color = p_color;
 	is_sorted = false;
 	points.push_back(p);
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 void ColorRamp::remove_point(int p_index) {
@@ -126,11 +130,13 @@ void ColorRamp::remove_point(int p_index) {
 	ERR_FAIL_INDEX(p_index, points.size());
 	ERR_FAIL_COND(points.size() <= 2);
 	points.remove(p_index);
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 void ColorRamp::set_points(Vector<ColorRamp::Point> &p_points) {
 	points = p_points;
 	is_sorted = false;
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 void ColorRamp::set_offset(int pos, const float offset) {
@@ -138,6 +144,7 @@ void ColorRamp::set_offset(int pos, const float offset) {
 		points.resize(pos + 1);
 	points[pos].offset = offset;
 	is_sorted = false;
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 float ColorRamp::get_offset(int pos) const {
@@ -152,6 +159,7 @@ void ColorRamp::set_color(int pos, const Color &color) {
 		is_sorted = false;
 	}
 	points[pos].color = color;
+	emit_signal(CoreStringNames::get_singleton()->changed);
 }
 
 Color ColorRamp::get_color(int pos) const {

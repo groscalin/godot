@@ -105,6 +105,7 @@
 #include "scene/2d/sound_player_2d.h"
 #include "scene/2d/y_sort.h"
 
+#include "scene/2d/line_2d.h"
 #include "scene/2d/position_2d.h"
 #include "scene/2d/tile_map.h"
 //#include "scene/2d/tile_map.h"
@@ -488,6 +489,7 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<SpriteFrames>();
 	ObjectTypeDB::register_type<AnimatedSprite>();
 	ObjectTypeDB::register_type<Position2D>();
+	ObjectTypeDB::register_type<Line2D>();
 	ObjectTypeDB::register_virtual_type<CollisionObject2D>();
 	ObjectTypeDB::register_virtual_type<PhysicsBody2D>();
 	ObjectTypeDB::register_type<StaticBody2D>();
