@@ -34,6 +34,7 @@
 #include "io/resource_saver.h"
 #include "os/thread_safe.h"
 #include "resource.h"
+#include "scene/main/node.h"
 #include "script_language.h"
 #include "self_list.h"
 
@@ -44,10 +45,13 @@
 #endif
 
 class DLScriptData;
+class DLLibrary;
 
 struct NativeLibrary {
 	StringName path;
 	void *handle;
+
+	DLLibrary *dllib;
 
 	Map<StringName, DLScriptData *> scripts;
 
@@ -130,7 +134,6 @@ struct DLScriptData {
 class DLLibrary;
 
 class DLScript : public Script {
-
 	GDCLASS(DLScript, Script);
 
 	Ref<DLLibrary> library;
@@ -141,12 +144,14 @@ class DLScript : public Script {
 
 #ifdef TOOLS_ENABLED
 	Set<PlaceHolderScriptInstance *> placeholders;
-// void _update_placeholder(PlaceHolderScriptInstance *p_placeholder);
-// virtual void _placeholder_erased(PlaceHolderScriptInstance *p_placeholder);
+	void _update_placeholder(PlaceHolderScriptInstance *p_placeholder);
+	virtual void _placeholder_erased(PlaceHolderScriptInstance *p_placeholder);
 #endif
 
 	friend class DLInstance;
 	friend class DLScriptLanguage;
+	friend class DLReloadNode;
+	friend class DLLibrary;
 
 protected:
 	static void _bind_methods();
@@ -200,17 +205,15 @@ class DLLibrary : public Resource {
 	OBJ_SAVE_TYPE(DLLibrary);
 
 	Map<StringName, String> platform_files;
-	NativeLibrary *library;
+	NativeLibrary *native_library;
 	static DLLibrary *currently_initialized_library;
 
 protected:
 	friend class DLScript;
 	friend class NativeLibrary;
+	friend class DLReloadNode;
 
 	DLScriptData *get_script_data(const StringName p_name);
-
-	Error _initialize();
-	Error _terminate();
 
 	bool _set(const StringName &p_name, const Variant &p_value);
 	bool _get(const StringName &p_name, Variant &r_ret) const;
@@ -219,6 +222,9 @@ protected:
 	static void _bind_methods();
 
 public:
+	Error _initialize();
+	Error _terminate();
+
 	static DLLibrary *get_currently_initialized_library();
 
 	void _register_script(const StringName p_name, const StringName p_base, godot_instance_create_func p_instance_func, godot_instance_destroy_func p_destroy_func);
@@ -278,9 +284,13 @@ public:
 	~DLInstance();
 };
 
+class DLReloadNode;
+
 class DLScriptLanguage : public ScriptLanguage {
 	friend class DLScript;
 	friend class DLInstance;
+	friend class DLReloadNode;
+	friend class DLLibrary;
 
 	static DLScriptLanguage *singleton;
 
@@ -293,7 +303,7 @@ class DLScriptLanguage : public ScriptLanguage {
 
 	Mutex *lock;
 
-	SelfList<DLScript>::List script_list;
+	Set<DLScript *> script_list;
 
 	bool profiling;
 	uint64_t script_frame_time;
@@ -383,6 +393,13 @@ public:
 
 	DLScriptLanguage();
 	~DLScriptLanguage();
+};
+
+class DLReloadNode : public Node {
+	GDCLASS(DLReloadNode, Node)
+public:
+	static void _bind_methods();
+	void _notification(int p_what);
 };
 
 class ResourceFormatLoaderDLScript : public ResourceFormatLoader {
