@@ -3737,7 +3737,7 @@ void EditorNode::_dock_select_input(const Ref<InputEvent> &p_input) {
 
 	if (me.is_valid()) {
 
-		Vector2 point = me->get_pos();
+		Vector2 point = me->get_position();
 
 		int nrect = -1;
 		for (int i = 0; i < DOCK_SLOT_MAX; i++) {
