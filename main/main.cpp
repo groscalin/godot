@@ -48,7 +48,9 @@
 #include "script_language.h"
 
 #include "core/io/ip.h"
+#ifdef DEBUG_ENABLED
 #include "main/tests/test_main.h"
+#endif
 #include "os/dir_access.h"
 #include "scene/main/viewport.h"
 #include "scene/resources/packed_scene.h"
@@ -63,7 +65,10 @@
 
 #include "servers/physics_2d_server.h"
 #include "servers/spatial_sound_2d_server.h"
+
+#ifndef _3D_DISABLED
 #include "servers/spatial_sound_server.h"
+#endif
 
 #include "core/io/file_access_pack.h"
 #include "core/io/file_access_zip.h"
@@ -132,6 +137,7 @@ void Main::print_help(const char *p_binary) {
 #ifdef TOOLS_ENABLED
 	OS::get_singleton()->print("\t-e,-editor : Bring up the editor instead of running the scene.\n");
 #endif
+#ifdef DEBUG_ENABLED
 	OS::get_singleton()->print("\t-test [test] : Run a test.\n");
 	OS::get_singleton()->print("\t\t(");
 	const char **test_names = tests_get_names();
@@ -143,7 +149,7 @@ void Main::print_help(const char *p_binary) {
 		coma = ", ";
 	}
 	OS::get_singleton()->print(")\n");
-
+#endif
 	OS::get_singleton()->print("\t-r WIDTHxHEIGHT\t : Request Window Resolution\n");
 	OS::get_singleton()->print("\t-p XxY\t : Request Window Position\n");
 	OS::get_singleton()->print("\t-f\t\t : Request Fullscreen\n");
@@ -1500,9 +1506,10 @@ bool Main::iteration() {
 
 		uint64_t fixed_begin = OS::get_singleton()->get_ticks_usec();
 
+#ifndef _3D_DISABLED
 		PhysicsServer::get_singleton()->sync();
 		PhysicsServer::get_singleton()->flush_queries();
-
+#endif
 		Physics2DServer::get_singleton()->sync();
 		Physics2DServer::get_singleton()->flush_queries();
 
@@ -1513,8 +1520,9 @@ bool Main::iteration() {
 
 		message_queue->flush();
 
+#ifndef _3D_DISABLED
 		PhysicsServer::get_singleton()->step(frame_slice * time_scale);
-
+#endif
 		Physics2DServer::get_singleton()->end_sync();
 		Physics2DServer::get_singleton()->step(frame_slice * time_scale);
 
@@ -1533,8 +1541,10 @@ bool Main::iteration() {
 	OS::get_singleton()->get_main_loop()->idle(step * time_scale);
 	message_queue->flush();
 
+#ifndef _3D_DISABLED
 	if (SpatialSoundServer::get_singleton())
 		SpatialSoundServer::get_singleton()->update(step * time_scale);
+#endif
 	if (SpatialSound2DServer::get_singleton())
 		SpatialSound2DServer::get_singleton()->update(step * time_scale);
 

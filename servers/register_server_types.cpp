@@ -32,10 +32,14 @@
 
 #include "audio_server.h"
 #include "physics_2d_server.h"
-#include "physics_server.h"
-#include "script_debugger_remote.h"
 #include "spatial_sound_2d_server.h"
+
+#ifndef _3D_DISABLED
+#include "physics_server.h"
 #include "spatial_sound_server.h"
+#endif
+
+#include "script_debugger_remote.h"
 #include "visual_server.h"
 
 static void _debugger_get_resource_usage(List<ScriptDebuggerRemote::ResourceUsage> *r_usage) {
@@ -61,12 +65,14 @@ void register_server_types() {
 	Globals::get_singleton()->add_singleton(Globals::Singleton("VS", VisualServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("AudioServer", AudioServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("AS", AudioServer::get_singleton()));
+#ifndef _3D_DISABLED
 	Globals::get_singleton()->add_singleton(Globals::Singleton("PhysicsServer", PhysicsServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("PS", PhysicsServer::get_singleton()));
-	Globals::get_singleton()->add_singleton(Globals::Singleton("Physics2DServer", Physics2DServer::get_singleton()));
-	Globals::get_singleton()->add_singleton(Globals::Singleton("PS2D", Physics2DServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("SpatialSoundServer", SpatialSoundServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("SS", SpatialSoundServer::get_singleton()));
+#endif
+	Globals::get_singleton()->add_singleton(Globals::Singleton("Physics2DServer", Physics2DServer::get_singleton()));
+	Globals::get_singleton()->add_singleton(Globals::Singleton("PS2D", Physics2DServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("SpatialSound2DServer", SpatialSound2DServer::get_singleton()));
 	Globals::get_singleton()->add_singleton(Globals::Singleton("SS2D", SpatialSound2DServer::get_singleton()));
 
@@ -76,11 +82,12 @@ void register_server_types() {
 	ObjectTypeDB::register_type<Physics2DTestMotionResult>();
 	ObjectTypeDB::register_type<Physics2DShapeQueryParameters>();
 
+#ifndef _3D_DISABLED
 	ObjectTypeDB::register_type<PhysicsShapeQueryParameters>();
 	ObjectTypeDB::register_virtual_type<PhysicsDirectBodyState>();
 	ObjectTypeDB::register_virtual_type<PhysicsDirectSpaceState>();
 	ObjectTypeDB::register_virtual_type<PhysicsShapeQueryResult>();
-
+#endif
 	ScriptDebuggerRemote::resource_usage_func = _debugger_get_resource_usage;
 }
 
