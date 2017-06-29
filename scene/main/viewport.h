@@ -99,9 +99,10 @@ private:
 	RID canvas_item;
 	RID current_canvas;
 
+#ifndef _3D_DISABLED
 	bool audio_listener;
 	RID internal_listener;
-
+#endif
 	bool audio_listener_2d;
 	RID internal_listener_2d;
 
@@ -113,8 +114,10 @@ private:
 	Rect2 to_screen_rect;
 
 	RID contact_2d_debug;
+#ifndef _3D_DISABLED
 	RID contact_3d_debug_multimesh;
 	RID contact_3d_debug_instance;
+#endif
 
 	bool size_override;
 	bool size_override_stretch;
@@ -144,15 +147,19 @@ private:
 	void _parent_visibility_changed();
 
 	Ref<World2D> world_2d;
+#ifndef _3D_DISABLED
 	Ref<World> world;
 	Ref<World> own_world;
+#endif
 
 	StringName input_group;
 	StringName gui_input_group;
 	StringName unhandled_input_group;
 	StringName unhandled_key_input_group;
 
+#ifndef _3D_DISABLED
 	void _update_listener();
+#endif
 	void _update_listener_2d();
 
 	void _propagate_enter_world(Node *p_node);
@@ -278,8 +285,14 @@ public:
 	Listener *get_listener() const;
 	Camera *get_camera() const;
 
+#ifndef _3D_DISABLED
 	void set_as_audio_listener(bool p_enable);
 	bool is_audio_listener() const;
+
+	void set_world(const Ref<World> &p_world);
+	Ref<World> get_world() const;
+	Ref<World> find_world() const;
+#endif
 
 	void set_as_audio_listener_2d(bool p_enable);
 	bool is_audio_listener_2d() const;
@@ -289,11 +302,7 @@ public:
 	Rect2 get_visible_rect() const;
 	RID get_viewport() const;
 
-	void set_world(const Ref<World> &p_world);
 	void set_world_2d(const Ref<World2D> &p_world_2d);
-	Ref<World> get_world() const;
-	Ref<World> find_world() const;
-
 	Ref<World2D> get_world_2d() const;
 	Ref<World2D> find_world_2d() const;
 
@@ -340,8 +349,10 @@ public:
 	void queue_screen_capture();
 	Image get_screen_capture() const;
 
+#ifndef _3D_DISABLED
 	void set_use_own_world(bool p_world);
 	bool is_using_own_world() const;
+#endif
 
 	void input(const InputEvent &p_event);
 	void unhandled_input(const InputEvent &p_event);

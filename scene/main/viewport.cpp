@@ -30,18 +30,20 @@
 #include "viewport.h"
 #include "os/input.h"
 #include "os/os.h"
-#include "scene/3d/spatial.h"
 #include "servers/physics_2d_server.h"
 //#include "scene/3d/camera.h"
 
 #include "scene/3d/camera.h"
 #include "scene/3d/collision_object.h"
 #include "scene/3d/listener.h"
-#include "scene/3d/spatial_indexer.h"
 #include "scene/gui/control.h"
 #include "scene/resources/mesh.h"
 #include "servers/spatial_sound_2d_server.h"
+#ifndef _3D_DISABLED
+#include "scene/3d/spatial.h"
+#include "scene/3d/spatial_indexer.h"
 #include "servers/spatial_sound_server.h"
+#endif
 
 #include "scene/2d/collision_object_2d.h"
 
@@ -200,7 +202,9 @@ void Viewport::_parent_visibility_changed() {
 		Control *c = parent_control;
 		VisualServer::get_singleton()->canvas_item_set_visible(canvas_item, c->is_visible());
 
+#ifndef _3D_DISABLED
 		_update_listener();
+#endif
 		_update_listener_2d();
 	}
 }
@@ -259,7 +263,9 @@ void Viewport::update_worlds() {
 	find_world_2d()->_update_viewport(this, xformed_rect);
 	find_world_2d()->_update();
 
+#ifndef _3D_DISABLED
 	find_world()->_update(get_tree()->get_frame());
+#endif
 }
 
 void Viewport::_test_new_mouseover(ObjectID new_collider) {
@@ -320,10 +326,14 @@ void Viewport::_notification(int p_what) {
 				_vp_enter_tree();
 
 			current_canvas = find_world_2d()->get_canvas();
+#ifndef _3D_DISABLED
 			VisualServer::get_singleton()->viewport_set_scenario(viewport, find_world()->get_scenario());
+#endif
 			VisualServer::get_singleton()->viewport_attach_canvas(viewport, current_canvas);
 
+#ifndef _3D_DISABLED
 			_update_listener();
+#endif
 			_update_listener_2d();
 			_update_rect();
 
@@ -335,6 +345,7 @@ void Viewport::_notification(int p_what) {
 				Physics2DServer::get_singleton()->space_set_debug_contacts(find_world_2d()->get_space(), get_tree()->get_collision_debug_contact_count());
 				contact_2d_debug = VisualServer::get_singleton()->canvas_item_create();
 				VisualServer::get_singleton()->canvas_item_set_parent(contact_2d_debug, find_world_2d()->get_canvas());
+#ifndef _3D_DISABLED
 				//3D
 				PhysicsServer::get_singleton()->space_set_debug_contacts(find_world()->get_space(), get_tree()->get_collision_debug_contact_count());
 				contact_3d_debug_multimesh = VisualServer::get_singleton()->multimesh_create();
@@ -345,6 +356,7 @@ void Viewport::_notification(int p_what) {
 				VisualServer::get_singleton()->instance_set_base(contact_3d_debug_instance, contact_3d_debug_multimesh);
 				VisualServer::get_singleton()->instance_set_scenario(contact_3d_debug_instance, find_world()->get_scenario());
 				VisualServer::get_singleton()->instance_geometry_set_flag(contact_3d_debug_instance, VS::INSTANCE_FLAG_VISIBLE_IN_ALL_ROOMS, true);
+#endif
 			}
 
 		} break;
@@ -388,20 +400,23 @@ void Viewport::_notification(int p_what) {
 				_vp_exit_tree();
 
 			VisualServer::get_singleton()->viewport_set_scenario(viewport, RID());
+#ifndef _3D_DISABLED
 			SpatialSoundServer::get_singleton()->listener_set_space(internal_listener, RID());
+#endif
 			VisualServer::get_singleton()->viewport_remove_canvas(viewport, current_canvas);
 			if (contact_2d_debug.is_valid()) {
 				VisualServer::get_singleton()->free(contact_2d_debug);
 				contact_2d_debug = RID();
 			}
 
+#ifndef _3D_DISABLED
 			if (contact_3d_debug_multimesh.is_valid()) {
 				VisualServer::get_singleton()->free(contact_3d_debug_multimesh);
 				VisualServer::get_singleton()->free(contact_3d_debug_instance);
 				contact_3d_debug_instance = RID();
 				contact_3d_debug_multimesh = RID();
 			}
-
+#endif
 			remove_from_group("_viewports");
 			parent_control = NULL;
 
@@ -430,6 +445,7 @@ void Viewport::_notification(int p_what) {
 				}
 			}
 
+#ifndef _3D_DISABLED
 			if (get_tree()->is_debugging_collisions_hint() && contact_3d_debug_multimesh.is_valid()) {
 
 				Vector<Vector3> points = PhysicsServer::get_singleton()->space_get_contacts(find_world()->get_space());
@@ -454,6 +470,7 @@ void Viewport::_notification(int p_what) {
 					VisualServer::get_singleton()->multimesh_set_aabb(contact_3d_debug_multimesh, aabb);
 				}
 			}
+#endif
 
 			if (physics_object_picking && (render_target || Input::get_singleton()->get_mouse_mode() != Input::MOUSE_MODE_CAPTURED)) {
 
@@ -687,6 +704,7 @@ Rect2 Viewport::get_rect() const {
 	return rect;
 }
 
+#ifndef _3D_DISABLED
 void Viewport::_update_listener() {
 
 	if (is_inside_tree() && audio_listener && (camera || listener) && (!get_parent() || (get_parent()->cast_to<Control>() && get_parent()->cast_to<Control>()->is_visible()))) {
@@ -695,6 +713,7 @@ void Viewport::_update_listener() {
 		SpatialSoundServer::get_singleton()->listener_set_space(internal_listener, RID());
 	}
 }
+#endif
 
 void Viewport::_update_listener_2d() {
 
@@ -704,8 +723,8 @@ void Viewport::_update_listener_2d() {
 		SpatialSound2DServer::get_singleton()->listener_set_space(internal_listener_2d, RID());
 }
 
+#ifndef _3D_DISABLED
 void Viewport::set_as_audio_listener(bool p_enable) {
-
 	if (p_enable == audio_listener)
 		return;
 
@@ -717,6 +736,7 @@ bool Viewport::is_audio_listener() const {
 
 	return audio_listener;
 }
+#endif
 
 void Viewport::set_as_audio_listener_2d(bool p_enable) {
 
@@ -971,8 +991,10 @@ void Viewport::_propagate_enter_world(Node *p_node) {
 			Viewport *v = p_node->cast_to<Viewport>();
 			if (v) {
 
+#ifndef _3D_DISABLED
 				if (v->world.is_valid())
 					return;
+#endif
 			}
 		}
 	}
@@ -1009,8 +1031,10 @@ void Viewport::_propagate_exit_world(Node *p_node) {
 			Viewport *v = p_node->cast_to<Viewport>();
 			if (v) {
 
+#ifndef _3D_DISABLED
 				if (v->world.is_valid())
 					return;
+#endif
 			}
 		}
 	}
@@ -1021,6 +1045,12 @@ void Viewport::_propagate_exit_world(Node *p_node) {
 	}
 }
 
+Ref<World2D> Viewport::get_world_2d() const {
+
+	return world_2d;
+}
+
+#ifndef _3D_DISABLED
 void Viewport::set_world(const Ref<World> &p_world) {
 
 	if (world == p_world)
@@ -1029,20 +1059,16 @@ void Viewport::set_world(const Ref<World> &p_world) {
 	if (is_inside_tree())
 		_propagate_exit_world(this);
 
-#ifndef _3D_DISABLED
 	if (find_world().is_valid() && camera)
 		camera->notification(Camera::NOTIFICATION_LOST_CURRENT);
-#endif
 
 	world = p_world;
 
 	if (is_inside_tree())
 		_propagate_enter_world(this);
 
-#ifndef _3D_DISABLED
 	if (find_world().is_valid() && camera)
 		camera->notification(Camera::NOTIFICATION_BECAME_CURRENT);
-#endif
 
 	//propagate exit
 
@@ -1058,11 +1084,6 @@ Ref<World> Viewport::get_world() const {
 	return world;
 }
 
-Ref<World2D> Viewport::get_world_2d() const {
-
-	return world_2d;
-}
-
 Ref<World> Viewport::find_world() const {
 
 	if (own_world.is_valid())
@@ -1074,6 +1095,7 @@ Ref<World> Viewport::find_world() const {
 	else
 		return Ref<World>();
 }
+#endif
 
 Listener *Viewport::get_listener() const {
 
@@ -2293,6 +2315,7 @@ void Viewport::unhandled_input(const InputEvent &p_event) {
 	}
 }
 
+#ifndef _3D_DISABLED
 void Viewport::set_use_own_world(bool p_world) {
 
 	if (p_world == own_world.is_valid())
@@ -2301,10 +2324,8 @@ void Viewport::set_use_own_world(bool p_world) {
 	if (is_inside_tree())
 		_propagate_exit_world(this);
 
-#ifndef _3D_DISABLED
 	if (find_world().is_valid() && camera)
 		camera->notification(Camera::NOTIFICATION_LOST_CURRENT);
-#endif
 
 	if (!p_world)
 		own_world = Ref<World>();
@@ -2314,10 +2335,8 @@ void Viewport::set_use_own_world(bool p_world) {
 	if (is_inside_tree())
 		_propagate_enter_world(this);
 
-#ifndef _3D_DISABLED
 	if (find_world().is_valid() && camera)
 		camera->notification(Camera::NOTIFICATION_BECAME_CURRENT);
-#endif
 
 	//propagate exit
 
@@ -2332,6 +2351,7 @@ bool Viewport::is_using_own_world() const {
 
 	return own_world.is_valid();
 }
+#endif
 
 void Viewport::set_render_target_to_screen_rect(const Rect2 &p_rect) {
 
@@ -2407,10 +2427,11 @@ void Viewport::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("set_world_2d", "world_2d:World2D"), &Viewport::set_world_2d);
 	ObjectTypeDB::bind_method(_MD("get_world_2d:World2D"), &Viewport::get_world_2d);
 	ObjectTypeDB::bind_method(_MD("find_world_2d:World2D"), &Viewport::find_world_2d);
+#ifndef _3D_DISABLED
 	ObjectTypeDB::bind_method(_MD("set_world", "world:World"), &Viewport::set_world);
 	ObjectTypeDB::bind_method(_MD("get_world:World"), &Viewport::get_world);
 	ObjectTypeDB::bind_method(_MD("find_world:World"), &Viewport::find_world);
-
+#endif
 	ObjectTypeDB::bind_method(_MD("set_canvas_transform", "xform"), &Viewport::set_canvas_transform);
 	ObjectTypeDB::bind_method(_MD("get_canvas_transform"), &Viewport::get_canvas_transform);
 
@@ -2468,13 +2489,17 @@ void Viewport::_bind_methods() {
 
 	ObjectTypeDB::bind_method(_MD("update_worlds"), &Viewport::update_worlds);
 
+#ifndef _3D_DISABLED
 	ObjectTypeDB::bind_method(_MD("set_use_own_world", "enable"), &Viewport::set_use_own_world);
 	ObjectTypeDB::bind_method(_MD("is_using_own_world"), &Viewport::is_using_own_world);
+#endif
 
 	ObjectTypeDB::bind_method(_MD("get_camera:Camera"), &Viewport::get_camera);
 
+#ifndef _3D_DISABLED
 	ObjectTypeDB::bind_method(_MD("set_as_audio_listener", "enable"), &Viewport::set_as_audio_listener);
 	ObjectTypeDB::bind_method(_MD("is_audio_listener", "enable"), &Viewport::is_audio_listener);
+#endif
 
 	ObjectTypeDB::bind_method(_MD("set_as_audio_listener_2d", "enable"), &Viewport::set_as_audio_listener_2d);
 	ObjectTypeDB::bind_method(_MD("is_audio_listener_2d", "enable"), &Viewport::is_audio_listener_2d);
@@ -2493,8 +2518,10 @@ void Viewport::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("_gui_remove_focus"), &Viewport::_gui_remove_focus);
 
 	ADD_PROPERTY(PropertyInfo(Variant::RECT2, "rect"), _SCS("set_rect"), _SCS("get_rect"));
+#ifndef _3D_DISABLED
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "own_world"), _SCS("set_use_own_world"), _SCS("is_using_own_world"));
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "world", PROPERTY_HINT_RESOURCE_TYPE, "World"), _SCS("set_world"), _SCS("get_world"));
+#endif
 	//	ADD_PROPERTY( PropertyInfo(Variant::OBJECT,"world_2d",PROPERTY_HINT_RESOURCE_TYPE,"World2D"), _SCS("set_world_2d"), _SCS("get_world_2d") );
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "transparent_bg"), _SCS("set_transparent_background"), _SCS("has_transparent_background"));
 	ADD_PROPERTY(PropertyInfo(Variant::BOOL, "render_target/enabled"), _SCS("set_as_render_target"), _SCS("is_set_as_render_target"));
@@ -2517,12 +2544,12 @@ void Viewport::_bind_methods() {
 }
 
 Viewport::Viewport() {
-
 	world_2d = Ref<World2D>(memnew(World2D));
-
 	viewport = VisualServer::get_singleton()->viewport_create();
+#ifndef _3D_DISABLED
 	internal_listener = SpatialSoundServer::get_singleton()->listener_create();
 	audio_listener = false;
+#endif
 	internal_listener_2d = SpatialSound2DServer::get_singleton()->listener_create();
 	audio_listener_2d = false;
 	transparent_bg = false;
@@ -2570,7 +2597,9 @@ Viewport::Viewport() {
 Viewport::~Viewport() {
 
 	VisualServer::get_singleton()->free(viewport);
+#ifndef _3D_DISABLED
 	SpatialSoundServer::get_singleton()->free(internal_listener);
+#endif
 	SpatialSound2DServer::get_singleton()->free(internal_listener_2d);
 	if (render_target_texture.is_valid())
 		render_target_texture->vp = NULL; //so if used, will crash

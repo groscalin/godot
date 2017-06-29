@@ -501,11 +501,13 @@ bool Spatial::is_set_as_toplevel() const {
 	return data.toplevel;
 }
 
+#ifndef _3D_DISABLED
 Ref<World> Spatial::get_world() const {
 
 	ERR_FAIL_COND_V(!is_inside_world(), Ref<World>());
 	return data.viewport->find_world();
 }
+#endif
 
 #ifdef TOOLS_ENABLED
 void Spatial::set_import_transform(const Transform &p_transform) {
@@ -723,7 +725,9 @@ void Spatial::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("set_ignore_transform_notification", "enabled"), &Spatial::set_ignore_transform_notification);
 	ObjectTypeDB::bind_method(_MD("set_as_toplevel", "enable"), &Spatial::set_as_toplevel);
 	ObjectTypeDB::bind_method(_MD("is_set_as_toplevel"), &Spatial::is_set_as_toplevel);
+#ifndef _3D_DISABLED
 	ObjectTypeDB::bind_method(_MD("get_world:World"), &Spatial::get_world);
+#endif
 
 	// TODO: Obsolete those two methods (old name) properly (GH-4397)
 	ObjectTypeDB::bind_method(_MD("_set_rotation_deg", "rotation_deg"), &Spatial::_set_rotation_deg);

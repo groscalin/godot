@@ -1656,9 +1656,11 @@ SceneTree::SceneTree() {
 
 	root = memnew(Viewport);
 	root->set_name("root");
+#ifndef _3D_DISABLED
 	root->set_world(Ref<World>(memnew(World)));
-	//root->set_world_2d( Ref<World2D>( memnew( World2D )));
 	root->set_as_audio_listener(true);
+#endif
+	root->set_world_2d( Ref<World2D>( memnew( World2D )));
 	root->set_as_audio_listener_2d(true);
 	current_scene = NULL;
 

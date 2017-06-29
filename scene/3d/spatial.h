@@ -134,7 +134,9 @@ public:
 
 	Spatial *get_parent_spatial() const;
 
+#ifndef _3D_DISABLED
 	Ref<World> get_world() const;
+#endif
 
 	void set_translation(const Vector3 &p_translation);
 	void set_rotation(const Vector3 &p_euler_rad);
