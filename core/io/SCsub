@@ -2,6 +2,10 @@
 
 Import('env')
 
-env.add_source_files(env.core_sources, "*.cpp")
+excludes = []
+if (env['xml'] == 'no'):
+    excludes.append('resource_format_xml.cpp')
+
+env.add_source_files(env.core_sources, "*.cpp", exclude=excludes)
 
 Export('env')

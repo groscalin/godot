@@ -160,8 +160,10 @@ public:
 	AABB get_aabb() const;
 	virtual RID get_rid() const;
 
+#ifndef _3D_DISABLED
 	Ref<Shape> create_trimesh_shape() const;
 	Ref<Shape> create_convex_shape() const;
+#endif
 
 	Ref<Mesh> create_outline(float p_margin) const;
 

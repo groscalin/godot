@@ -43,11 +43,13 @@
 #include "io/packet_peer_udp.h"
 #include "io/pck_packer.h"
 #include "io/resource_format_binary.h"
+#ifdef XML_ENABLED
 #include "io/resource_format_xml.h"
+#endif
 #include "io/stream_peer_ssl.h"
 #include "io/tcp_server.h"
 #include "io/translation_loader_po.h"
-#include "math/a_star.h"
+//#include "math/a_star.h"
 #include "object_type_db.h"
 #include "os/input.h"
 #include "os/main_loop.h"
@@ -141,7 +143,7 @@ void register_core_types() {
 
 	ObjectTypeDB::register_type<PackedDataContainer>();
 	ObjectTypeDB::register_virtual_type<PackedDataContainerRef>();
-	ObjectTypeDB::register_type<AStar>();
+	//ObjectTypeDB::register_type<AStar>();
 
 	ip = IP::create();
 

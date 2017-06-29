@@ -4,16 +4,12 @@ Import('env')
 
 env.servers_sources = []
 
+excludes = []
 if (env["disable_3d"] == "yes"):
-    env.servers_sources.append("physics_server.cpp")
-    env.servers_sources.append("spatial_sound_server.cpp")
+    excludes.append('physics_server.cpp')
+    excludes.append('spatial_sound_server.cpp')
 
-env.servers_sources.append("audio_server.cpp")
-env.servers_sources.append("physics_2d_server.cpp")
-env.servers_sources.append("register_server_types.cpp")
-env.servers_sources.append("spatial_sound_2d_server.cpp")
-env.servers_sources.append("visual_server.cpp")
-#env.add_source_files(env.servers_sources, "*.cpp")
+env.add_source_files(env.servers_sources, "*.cpp", exclude=excludes)
 
 Export('env')
 

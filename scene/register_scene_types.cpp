@@ -140,6 +140,8 @@
 #include "scene/audio/event_player.h"
 #include "scene/audio/sound_room_params.h"
 #include "scene/audio/stream_player.h"
+
+#ifndef _3D_DISABLED
 #include "scene/resources/box_shape.h"
 #include "scene/resources/capsule_shape.h"
 #include "scene/resources/concave_polygon_shape.h"
@@ -147,6 +149,7 @@
 #include "scene/resources/plane_shape.h"
 #include "scene/resources/ray_shape.h"
 #include "scene/resources/sphere_shape.h"
+#endif
 
 #include "scene/resources/capsule_shape_2d.h"
 #include "scene/resources/circle_shape_2d.h"
@@ -169,7 +172,9 @@
 
 #include "scene/resources/shader_graph.h"
 
+#ifndef _3D_DISABLED
 #include "scene/resources/world.h"
+#endif
 #include "scene/resources/world_2d.h"
 
 #include "scene/resources/audio_stream.h"
@@ -547,6 +552,7 @@ void register_scene_types() {
 
 	OS::get_singleton()->yield(); //may take time to init
 
+#ifndef _3D_DISABLED
 	ObjectTypeDB::register_type<RayShape>();
 	ObjectTypeDB::register_type<SphereShape>();
 	ObjectTypeDB::register_type<BoxShape>();
@@ -554,15 +560,15 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<PlaneShape>();
 	ObjectTypeDB::register_type<ConvexPolygonShape>();
 	ObjectTypeDB::register_type<ConcavePolygonShape>();
-
+#endif
 	ObjectTypeDB::register_type<SurfaceTool>();
 	ObjectTypeDB::register_type<MeshDataTool>();
 	ObjectTypeDB::register_type<BakedLight>();
 
 	OS::get_singleton()->yield(); //may take time to init
 
-#endif
 	ObjectTypeDB::register_type<World>();
+#endif
 	ObjectTypeDB::register_type<Environment>();
 	ObjectTypeDB::register_type<World2D>();
 	ObjectTypeDB::register_virtual_type<Texture>();

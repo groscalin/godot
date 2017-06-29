@@ -28,8 +28,10 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 #include "mesh.h"
+#ifndef _3D_DISABLED
 #include "scene/resources/concave_polygon_shape.h"
 #include "scene/resources/convex_polygon_shape.h"
+#endif
 #include "surface_tool.h"
 
 static const char *_array_name[] = {
@@ -543,6 +545,7 @@ DVector<Face3> Mesh::get_faces() const {
 */
 }
 
+#ifndef _3D_DISABLED
 Ref<Shape> Mesh::create_convex_shape() const {
 
 	DVector<Vector3> vertices;
@@ -578,6 +581,7 @@ Ref<Shape> Mesh::create_trimesh_shape() const {
 	shape->set_faces(face_points);
 	return shape;
 }
+#endif
 
 void Mesh::center_geometry() {
 
@@ -919,8 +923,10 @@ void Mesh::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("surface_get_material:Material", "surf_idx"), &Mesh::surface_get_material);
 	ObjectTypeDB::bind_method(_MD("surface_set_name", "surf_idx", "name"), &Mesh::surface_set_name);
 	ObjectTypeDB::bind_method(_MD("surface_get_name", "surf_idx"), &Mesh::surface_get_name);
+#ifndef _3D_DISABLED
 	ObjectTypeDB::bind_method(_MD("create_trimesh_shape:Shape"), &Mesh::create_trimesh_shape);
 	ObjectTypeDB::bind_method(_MD("create_convex_shape:Shape"), &Mesh::create_convex_shape);
+#endif
 	ObjectTypeDB::bind_method(_MD("create_outline:Mesh", "margin"), &Mesh::create_outline);
 	ObjectTypeDB::bind_method(_MD("center_geometry"), &Mesh::center_geometry);
 	ObjectTypeDB::set_method_flags(get_type_static(), _SCS("center_geometry"), METHOD_FLAGS_DEFAULT | METHOD_FLAG_EDITOR);

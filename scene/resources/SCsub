@@ -2,7 +2,20 @@
 
 Import('env')
 
-env.add_source_files(env.scene_sources, "*.cpp")
+exc = []
+if (env["disable_3d"] == "yes"):
+    exc = [
+        "world.cpp",
+        "box_shape.cpp",
+        "capsule_shape.cpp",
+        "concave_polygon_shape.cpp",
+        "convex_polygon_shape.cpp",
+        "plane_shape.cpp",
+        "ray_shape.cpp",
+        "sphere_shape.cpp"
+    ]
+print exc
+env.add_source_files(env.scene_sources, "*.cpp", exclude=exc)
 
 Export('env')
 

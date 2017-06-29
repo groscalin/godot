@@ -32,7 +32,9 @@
 #include "os/os.h"
 #include "scene/main/scene_main_loop.h"
 #include "servers/physics_2d_server.h"
+#ifndef _3D_DISABLED
 #include "servers/physics_server.h"
+#endif
 #include "servers/visual_server.h"
 Performance *Performance::singleton = NULL;
 
@@ -64,9 +66,11 @@ void Performance::_bind_methods() {
 	BIND_CONSTANT(PHYSICS_2D_ACTIVE_OBJECTS);
 	BIND_CONSTANT(PHYSICS_2D_COLLISION_PAIRS);
 	BIND_CONSTANT(PHYSICS_2D_ISLAND_COUNT);
+#ifndef _3D_DISABLED
 	BIND_CONSTANT(PHYSICS_3D_ACTIVE_OBJECTS);
 	BIND_CONSTANT(PHYSICS_3D_COLLISION_PAIRS);
 	BIND_CONSTANT(PHYSICS_3D_ISLAND_COUNT);
+#endif
 
 	BIND_CONSTANT(MONITOR_MAX);
 }
@@ -100,9 +104,11 @@ String Performance::get_monitor_name(Monitor p_monitor) const {
 		"physics_2d/active_objects",
 		"physics_2d/collision_pairs",
 		"physics_2d/islands",
+#ifndef _3D_DISABLED
 		"physics_3d/active_objects",
 		"physics_3d/collision_pairs",
 		"physics_3d/islands",
+#endif
 
 	};
 
@@ -145,10 +151,11 @@ float Performance::get_monitor(Monitor p_monitor) const {
 		case PHYSICS_2D_ACTIVE_OBJECTS: return Physics2DServer::get_singleton()->get_process_info(Physics2DServer::INFO_ACTIVE_OBJECTS);
 		case PHYSICS_2D_COLLISION_PAIRS: return Physics2DServer::get_singleton()->get_process_info(Physics2DServer::INFO_COLLISION_PAIRS);
 		case PHYSICS_2D_ISLAND_COUNT: return Physics2DServer::get_singleton()->get_process_info(Physics2DServer::INFO_ISLAND_COUNT);
+#ifndef _3D_DISABLED
 		case PHYSICS_3D_ACTIVE_OBJECTS: return PhysicsServer::get_singleton()->get_process_info(PhysicsServer::INFO_ACTIVE_OBJECTS);
 		case PHYSICS_3D_COLLISION_PAIRS: return PhysicsServer::get_singleton()->get_process_info(PhysicsServer::INFO_COLLISION_PAIRS);
 		case PHYSICS_3D_ISLAND_COUNT: return PhysicsServer::get_singleton()->get_process_info(PhysicsServer::INFO_ISLAND_COUNT);
-
+#endif
 		default: {}
 	}
 
