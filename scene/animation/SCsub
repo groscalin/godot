@@ -2,6 +2,12 @@
 
 Import('env')
 
-env.add_source_files(env.scene_sources, "*.cpp")
+exc = []
+if (env["disable_3d"] == "yes"):
+    exc = [
+        "animation_tree_player.cpp",
+    ]
+
+env.add_source_files(env.scene_sources, "*.cpp", exclude=exc)
 
 Export('env')

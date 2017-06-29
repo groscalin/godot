@@ -22,7 +22,9 @@ SConscript('gles2/SCsub')
 SConscript('gl_context/SCsub')
 
 # Core dependencies
-SConscript("png/SCsub")
+if ("builtin_libpng" in env and env["builtin_libpng"] == "yes"):
+    SConscript("png/SCsub")
+
 SConscript("nrex/SCsub")
 
 # Tools override

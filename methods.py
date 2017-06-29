@@ -1,7 +1,7 @@
 import os
 
 
-def add_source_files(self, sources, filetype, lib_env=None, shared=False):
+def add_source_files(self, sources, filetype, lib_env=None, shared=False, exclude=[]):
     import glob
     import string
     # if not lib_objects:
@@ -12,10 +12,16 @@ def add_source_files(self, sources, filetype, lib_env=None, shared=False):
         dir = self.Dir('.').abspath
         list = glob.glob(dir + "/" + filetype)
         for f in list:
-            sources.append(self.Object(f))
+            if os.path.basename(f) not in exclude:
+                sources.append(self.Object(f))
+            #else:
+            #    print 'exclude:',f
     else:
         for f in filetype:
-            sources.append(self.Object(f))
+            if os.path.basename(f) not in exclude:
+                sources.append(self.Object(f))
+            #else:
+            #    print 'exclude:',f
 
 
 def build_shader_header(target, source, env):

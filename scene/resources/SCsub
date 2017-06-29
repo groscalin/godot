@@ -14,7 +14,7 @@ if (env["disable_3d"] == "yes"):
         "ray_shape.cpp",
         "sphere_shape.cpp"
     ]
-print exc
+
 env.add_source_files(env.scene_sources, "*.cpp", exclude=exc)
 
 Export('env')

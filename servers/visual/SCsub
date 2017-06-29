@@ -2,6 +2,12 @@
 
 Import('env')
 
-env.add_source_files(env.servers_sources, "*.cpp")
+exc = []
+if (env["disable_advanced_gui"] == "yes"):
+    exc = [
+        "visual_server_wrap_mt.cpp",
+    ]
+
+env.add_source_files(env.servers_sources, "*.cpp", exclude=exc)
 
 Export('env')

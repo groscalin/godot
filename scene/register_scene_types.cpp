@@ -47,44 +47,33 @@
 #include "scene/gui/center_container.h"
 #include "scene/gui/check_box.h"
 #include "scene/gui/check_button.h"
-#include "scene/gui/color_picker.h"
-#include "scene/gui/color_rect.h"
 #include "scene/gui/control.h"
-#include "scene/gui/dialogs.h"
-#include "scene/gui/file_dialog.h"
 #include "scene/gui/graph_edit.h"
 #include "scene/gui/graph_node.h"
 #include "scene/gui/grid_container.h"
 #include "scene/gui/item_list.h"
 #include "scene/gui/label.h"
-#include "scene/gui/line_edit.h"
 #include "scene/gui/link_button.h"
 #include "scene/gui/margin_container.h"
-#include "scene/gui/menu_button.h"
-#include "scene/gui/option_button.h"
 #include "scene/gui/panel.h"
 #include "scene/gui/panel_container.h"
 #include "scene/gui/patch_9_frame.h"
-#include "scene/gui/popup_menu.h"
 #include "scene/gui/progress_bar.h"
-#include "scene/gui/reference_frame.h"
 #include "scene/gui/rich_text_label.h"
 #include "scene/gui/scroll_bar.h"
 #include "scene/gui/scroll_container.h"
 #include "scene/gui/separator.h"
 #include "scene/gui/slider.h"
-#include "scene/gui/spin_box.h"
-#include "scene/gui/spin_box.h"
 #include "scene/gui/split_container.h"
 #include "scene/gui/tab_container.h"
 #include "scene/gui/tabs.h"
-#include "scene/gui/text_edit.h"
 #include "scene/gui/texture_button.h"
 #include "scene/gui/texture_frame.h"
 #include "scene/gui/texture_progress.h"
 #include "scene/gui/tool_button.h"
-#include "scene/gui/tree.h"
-#include "scene/gui/video_player.h"
+#include "scene/gui/color_rect.h"
+#include "scene/gui/dialogs.h"
+
 #include "scene/main/canvas_layer.h"
 #include "scene/main/http_request.h"
 #include "scene/main/instance_placeholder.h"
@@ -122,7 +111,6 @@
 #include "scene/resources/tile_set.h"
 
 #include "scene/animation/animation_player.h"
-#include "scene/animation/animation_tree_player.h"
 #include "scene/animation/tween.h"
 #include "scene/main/resource_preloader.h"
 #include "scene/main/scene_main_loop.h"
@@ -140,16 +128,6 @@
 #include "scene/audio/event_player.h"
 #include "scene/audio/sound_room_params.h"
 #include "scene/audio/stream_player.h"
-
-#ifndef _3D_DISABLED
-#include "scene/resources/box_shape.h"
-#include "scene/resources/capsule_shape.h"
-#include "scene/resources/concave_polygon_shape.h"
-#include "scene/resources/convex_polygon_shape.h"
-#include "scene/resources/plane_shape.h"
-#include "scene/resources/ray_shape.h"
-#include "scene/resources/sphere_shape.h"
-#endif
 
 #include "scene/resources/capsule_shape_2d.h"
 #include "scene/resources/circle_shape_2d.h"
@@ -172,9 +150,6 @@
 
 #include "scene/resources/shader_graph.h"
 
-#ifndef _3D_DISABLED
-#include "scene/resources/world.h"
-#endif
 #include "scene/resources/world_2d.h"
 
 #include "scene/resources/audio_stream.h"
@@ -184,7 +159,6 @@
 #include "scene/resources/sample_library.h"
 #include "scene/scene_string_names.h"
 
-#include "scene/3d/bone_attachment.h"
 #include "scene/3d/path.h"
 #include "scene/3d/room_instance.h"
 #include "scene/3d/scenario_fx.h"
@@ -193,35 +167,60 @@
 
 #include "scene/3d/visibility_notifier.h"
 
+#ifndef ADVANCED_GUI_DISABLED
+#include "scene/gui/file_dialog.h"
+#include "scene/gui/line_edit.h"
+#include "scene/gui/popup_menu.h"
+#include "scene/gui/tree.h"
+#include "scene/gui/text_edit.h"
+#include "scene/gui/option_button.h"
+#include "scene/gui/spin_box.h"
+#include "scene/gui/reference_frame.h"
+#include "scene/gui/color_picker.h"
+#include "scene/gui/video_player.h"
+#include "scene/gui/menu_button.h"
+#endif
+
 #ifndef _3D_DISABLED
+#include "scene/animation/animation_tree_player.h"
+#include "scene/resources/box_shape.h"
+#include "scene/resources/capsule_shape.h"
+#include "scene/resources/concave_polygon_shape.h"
+#include "scene/resources/convex_polygon_shape.h"
+#include "scene/resources/plane_shape.h"
+#include "scene/resources/ray_shape.h"
+#include "scene/resources/sphere_shape.h"
+#include "scene/resources/world.h"
+
+#include "scene/resources/environment.h"
+
+#include "scene/3d/bone_attachment.h"
 #include "scene/3d/camera.h"
 #include "scene/3d/listener.h"
-
 #include "scene/3d/interpolated_camera.h"
-#include "scene/3d/light.h"
+#include "scene/3d/test_cube.h"
 #include "scene/3d/mesh_instance.h"
-#include "scene/3d/particles.h"
-#include "scene/3d/physics_body.h"
+#include "scene/3d/immediate_geometry.h"
+#include "scene/3d/sprite_3d.h"
+#include "scene/3d/light.h"
 #include "scene/3d/portal.h"
+#include "scene/3d/particles.h"
 #include "scene/3d/position_3d.h"
 #include "scene/3d/quad.h"
-#include "scene/3d/test_cube.h"
-#include "scene/resources/environment.h"
+#include "scene/3d/navigation.h"
+#include "scene/3d/navigation_mesh.h"
+#include "scene/3d/physics_body.h"
 
 #include "scene/3d/area.h"
 #include "scene/3d/baked_light_instance.h"
 #include "scene/3d/body_shape.h"
 #include "scene/3d/collision_polygon.h"
-#include "scene/3d/immediate_geometry.h"
 #include "scene/3d/multimesh_instance.h"
-#include "scene/3d/navigation.h"
-#include "scene/3d/navigation_mesh.h"
 #include "scene/3d/physics_joint.h"
 #include "scene/3d/proximity_group.h"
 #include "scene/3d/ray_cast.h"
 #include "scene/3d/spatial_sample_player.h"
 #include "scene/3d/spatial_stream_player.h"
-#include "scene/3d/sprite_3d.h"
 #include "scene/3d/vehicle_body.h"
 #endif
 
@@ -326,7 +325,6 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<VSlider>();
 	ObjectTypeDB::register_type<Popup>();
 	ObjectTypeDB::register_type<PopupPanel>();
-	ObjectTypeDB::register_type<MenuButton>();
 	ObjectTypeDB::register_type<CheckBox>();
 	ObjectTypeDB::register_type<CheckButton>();
 	ObjectTypeDB::register_type<ToolButton>();
@@ -367,8 +365,14 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<TextureProgress>();
 	ObjectTypeDB::register_type<ItemList>();
 
+	ObjectTypeDB::register_type<PopupDialog>();
+	ObjectTypeDB::register_type<WindowDialog>();
+	ObjectTypeDB::register_type<AcceptDialog>();
+	ObjectTypeDB::register_type<ConfirmationDialog>();
+
 #ifndef ADVANCED_GUI_DISABLED
 
+	ObjectTypeDB::register_type<MenuButton>();
 	ObjectTypeDB::register_type<FileDialog>();
 	ObjectTypeDB::register_type<LineEdit>();
 	ObjectTypeDB::register_type<PopupMenu>();
@@ -383,10 +387,8 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<ColorPicker>();
 	ObjectTypeDB::register_type<ColorPickerButton>();
 	ObjectTypeDB::register_type<RichTextLabel>();
-	ObjectTypeDB::register_type<PopupDialog>();
-	ObjectTypeDB::register_type<WindowDialog>();
-	ObjectTypeDB::register_type<AcceptDialog>();
-	ObjectTypeDB::register_type<ConfirmationDialog>();
+
+
 	ObjectTypeDB::register_type<VideoPlayer>();
 	ObjectTypeDB::register_type<MarginContainer>();
 

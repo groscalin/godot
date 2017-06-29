@@ -370,6 +370,8 @@ if selected_platform in platform_list:
         env.Append(CPPFLAGS=['-DGDSCRIPT_ENABLED'])
     if (env['disable_advanced_gui'] == 'yes'):
         env.Append(CPPFLAGS=['-DADVANCED_GUI_DISABLED'])
+    if (env['builtin_libpng'] == 'yes'):
+        env.Append(CPPFLAGS=['-DBUILTIN_LIBPNG'])
 
     if (env['minizip'] == 'yes'):
         env.Append(CPPFLAGS=['-DMINIZIP_ENABLED'])

@@ -36,7 +36,7 @@
 
 #include "main/main.h"
 #include "servers/visual/visual_server_raster.h"
-#include "servers/visual/visual_server_wrap_mt.h"
+//#include "servers/visual/visual_server_wrap_mt.h"
 
 #include "file_access_android.h"
 
@@ -137,10 +137,12 @@ void OS_Android::initialize(const VideoMode &p_desired, int p_video_driver, int 
 	rasterizer->set_force_16_bits_fbo(use_16bits_fbo);
 
 	visual_server = memnew(VisualServerRaster(rasterizer));
+    /*
 	if (get_render_thread_mode() != RENDER_THREAD_UNSAFE) {
 
 		visual_server = memnew(VisualServerWrapMT(visual_server, false));
 	};
+    */
 	visual_server->init();
 	visual_server->cursor_set_visible(false, 0);
 

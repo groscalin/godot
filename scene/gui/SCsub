@@ -2,6 +2,22 @@
 
 Import('env')
 
-env.add_source_files(env.scene_sources, "*.cpp")
+exc = []
+if (env["disable_advanced_gui"] == "yes"):
+    exc = [
+        "file_dialog.cpp",
+        "line_edit.cpp",
+        "popup_menu.cpp",
+        "tree.cpp",
+        "text_edit.cpp",
+        "option_button.cpp",
+        "spin_box.cpp",
+        "reference_frame.cpp",
+        "color_picker.cpp",
+        "video_player.cpp",
+        "menu_button.cpp",
+    ]
+
+env.add_source_files(env.scene_sources, "*.cpp", exclude=exc)
 
 Export('env')

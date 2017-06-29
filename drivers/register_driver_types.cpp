@@ -30,8 +30,10 @@
 #include "register_driver_types.h"
 
 #include "core/math/geometry.h"
+#ifdef BUILTIN_LIBPNG
 #include "png/image_loader_png.h"
 #include "png/resource_saver_png.h"
+#endif
 
 #ifdef TOOLS_ENABLED
 #include "convex_decomp/b2d_decompose.h"
@@ -43,26 +45,31 @@
 
 #include "drivers/nrex/regex.h"
 
+#ifdef BUILTIN_LIBPNG
 static ImageLoaderPNG *image_loader_png = NULL;
 static ResourceSaverPNG *resource_saver_png = NULL;
+#endif
 
 void register_core_driver_types() {
 
+#ifdef BUILTIN_LIBPNG
 	image_loader_png = memnew(ImageLoaderPNG);
 	ImageLoader::add_image_format_loader(image_loader_png);
 
 	resource_saver_png = memnew(ResourceSaverPNG);
 	ResourceSaver::add_resource_format_saver(resource_saver_png);
-
+#endif
 	ObjectTypeDB::register_type<RegEx>();
 }
 
 void unregister_core_driver_types() {
 
+#ifdef BUILTIN_LIBPNG
 	if (image_loader_png)
 		memdelete(image_loader_png);
 	if (resource_saver_png)
 		memdelete(resource_saver_png);
+#endif
 }
 
 void register_driver_types() {
