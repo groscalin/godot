@@ -144,9 +144,9 @@ void Array::insert(int p_pos, const Variant &p_value) {
 	_p->array.insert(p_pos, p_value);
 }
 
-void Array::erase(const Variant &p_value) {
+bool Array::erase(const Variant &p_value) {
 
-	_p->array.erase(p_value);
+	return _p->array.erase(p_value);
 }
 
 Variant Array::front() const {

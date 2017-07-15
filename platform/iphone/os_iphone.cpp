@@ -118,8 +118,6 @@ void OSIPhone::initialize(const VideoMode &p_desired, int p_video_driver, int p_
 		visual_server = memnew(VisualServerWrapMT(visual_server, false));
 	};
 	visual_server->init();
-
-	visual_server->init();
 	visual_server->cursor_set_visible(false, 0);
 
 	audio_driver = memnew(AudioDriverIphone);
@@ -129,15 +127,18 @@ void OSIPhone::initialize(const VideoMode &p_desired, int p_video_driver, int p_
 	sample_manager = memnew(SampleManagerMallocSW);
 	audio_server = memnew(AudioServerSW(sample_manager));
 	audio_server->init();
+#ifndef _3D_DISABLED
 	spatial_sound_server = memnew(SpatialSoundServerSW);
 	spatial_sound_server->init();
-
+#endif
 	spatial_sound_2d_server = memnew(SpatialSound2DServerSW);
 	spatial_sound_2d_server->init();
 
 	//
+#ifndef _3D_DISABLED
 	physics_server = memnew(PhysicsServerSW);
 	physics_server->init();
+#endif
 	//physics_2d_server = memnew( Physics2DServerSW );
 	physics_2d_server = Physics2DServerWrapMT::init_server<Physics2DServerSW>();
 	physics_2d_server->init();

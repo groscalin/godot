@@ -80,7 +80,7 @@ public:
 	int count(const Variant &p_value) const;
 	bool has(const Variant &p_value) const;
 
-	void erase(const Variant &p_value);
+	bool erase(const Variant &p_value);
 
 	void push_front(const Variant &p_value);
 	void pop_back();

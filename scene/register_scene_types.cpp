@@ -369,6 +369,7 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<WindowDialog>();
 	ObjectTypeDB::register_type<AcceptDialog>();
 	ObjectTypeDB::register_type<ConfirmationDialog>();
+	ObjectTypeDB::register_type<RichTextLabel>();
 
 #ifndef ADVANCED_GUI_DISABLED
 
@@ -386,7 +387,6 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<ReferenceFrame>();
 	ObjectTypeDB::register_type<ColorPicker>();
 	ObjectTypeDB::register_type<ColorPickerButton>();
-	ObjectTypeDB::register_type<RichTextLabel>();
 
 
 	ObjectTypeDB::register_type<VideoPlayer>();

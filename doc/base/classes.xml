@@ -4673,6 +4673,7 @@
 			</description>
 		</method>
 		<method name="erase">
+			<return type="bool">
 			<argument index="0" name="value" type="var">
 			</argument>
 			<description>

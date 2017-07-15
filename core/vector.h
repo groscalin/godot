@@ -119,9 +119,14 @@ public:
 	bool push_back(T p_elem);
 
 	void remove(int p_index);
-	void erase(const T &p_val) {
+	bool erase(const T &p_val) {
 		int idx = find(p_val);
-		if (idx >= 0) remove(idx);
+		if (idx >= 0) {
+            remove(idx);
+            return true;
+        } else {
+            return false;
+        }
 	};
 	void invert();
 
