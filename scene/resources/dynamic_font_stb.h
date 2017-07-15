@@ -6,8 +6,6 @@
 #include "font.h"
 #include "io/resource_loader.h"
 
-#include "thirdparty/misc/stb_truetype.h"
-
 class DynamicFontAtSize;
 class DynamicFont;
 

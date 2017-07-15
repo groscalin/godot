@@ -6,6 +6,7 @@ env_png = env.Clone()
 
 # Thirdparty source files
 if (env['builtin_libpng'] != 'no'):
+    env.Append(CPPPATH=["#thirdparty/libpng"])
     thirdparty_dir = "#thirdparty/libpng/"
     thirdparty_sources = [
         "png.c",

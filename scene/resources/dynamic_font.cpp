@@ -434,7 +434,7 @@ void DynamicFontAtSize::_update_char(CharType p_char) {
 		char_map[p_char] = ch;
 		return;
 	}
-	int error = FT_Load_Char(face, p_char, FT_LOAD_RENDER | (font->force_autohinter ? FT_LOAD_FORCE_AUTOHINT : 0));
+	int error = FT_Load_Char(face, p_char, FT_LOAD_RENDER | FT_LOAD_NO_HINTING | (font->force_autohinter ? FT_LOAD_FORCE_AUTOHINT : 0));
 	if (!error) {
 		error = FT_Render_Glyph(face->glyph, ft_render_mode_normal);
 	}
@@ -511,7 +511,7 @@ void DynamicFontAtSize::_update_char(CharType p_char) {
 		break;
 	}
 
-	//	print_line("CHAR: "+String::chr(p_char)+" TEX INDEX: "+itos(tex_index)+" X: "+itos(tex_x)+" Y: "+itos(tex_y));
+	//print_line("CHAR: "+String::chr(p_char)+" TEX INDEX: "+itos(tex_index)+" X: "+itos(tex_x)+" Y: "+itos(tex_y)+ " w: "+itos(w)+" h: "+itos(h));
 
 	if (tex_index == -1) {
 		//could not find texture to fit, create one
@@ -577,6 +577,8 @@ void DynamicFontAtSize::_update_char(CharType p_char) {
 		} else {
 			tex.texture->set_data(img); //update
 		}
+
+        //img.save_png("res://ftype.png");
 	}
 
 	// update height array
