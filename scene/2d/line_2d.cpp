@@ -18,7 +18,7 @@ Line2D::Line2D() : Node2D() {
 	_round_precision = 8;
 }
 
-void Line2D::set_points(const PoolVector<Vector2> &p_points) {
+void Line2D::set_points(const DVector<Vector2> &p_points) {
 	_points = p_points;
 	update();
 }
@@ -34,7 +34,7 @@ float Line2D::get_width() const {
 	return _width;
 }
 
-PoolVector<Vector2> Line2D::get_points() const {
+DVector<Vector2> Line2D::get_points() const {
 	return _points;
 }
 
@@ -175,7 +175,7 @@ void Line2D::_draw() {
 	Vector<Vector2> points;
 	points.resize(_points.size());
 	int len = points.size(); {
-		PoolVector<Vector2>::Read points_read = _points.read();
+		DVector<Vector2>::Read points_read = _points.read();
 		for(int i = 0; i < len; ++i) {
 			points[i] = points_read[i];
 		}
@@ -236,48 +236,48 @@ void Line2D::_gradient_changed() {
 // static
 void Line2D::_bind_methods() {
 
-	ClassDB::bind_method(_MD("set_points","points"), &Line2D::set_points);
-	ClassDB::bind_method(_MD("get_points"), &Line2D::get_points);
+	ObjectTypeDB::bind_method(_MD("set_points","points"), &Line2D::set_points);
+	ObjectTypeDB::bind_method(_MD("get_points"), &Line2D::get_points);
 
-	ClassDB::bind_method(_MD("set_point_pos","i", "pos"), &Line2D::set_point_pos);
-	ClassDB::bind_method(_MD("get_point_pos", "i"), &Line2D::get_point_pos);
+	ObjectTypeDB::bind_method(_MD("set_point_pos","i", "pos"), &Line2D::set_point_pos);
+	ObjectTypeDB::bind_method(_MD("get_point_pos", "i"), &Line2D::get_point_pos);
 
-	ClassDB::bind_method(_MD("get_point_count"), &Line2D::get_point_count);
+	ObjectTypeDB::bind_method(_MD("get_point_count"), &Line2D::get_point_count);
 
-	ClassDB::bind_method(_MD("add_point", "pos"), &Line2D::add_point);
-	ClassDB::bind_method(_MD("remove_point", "i"), &Line2D::remove_point);
+	ObjectTypeDB::bind_method(_MD("add_point", "pos"), &Line2D::add_point);
+	ObjectTypeDB::bind_method(_MD("remove_point", "i"), &Line2D::remove_point);
 
-	ClassDB::bind_method(_MD("set_width","width"), &Line2D::set_width);
-	ClassDB::bind_method(_MD("get_width"), &Line2D::get_width);
+	ObjectTypeDB::bind_method(_MD("set_width","width"), &Line2D::set_width);
+	ObjectTypeDB::bind_method(_MD("get_width"), &Line2D::get_width);
 
-	ClassDB::bind_method(_MD("set_default_color", "color"), &Line2D::set_default_color);
-	ClassDB::bind_method(_MD("get_default_color"), &Line2D::get_default_color);
+	ObjectTypeDB::bind_method(_MD("set_default_color", "color"), &Line2D::set_default_color);
+	ObjectTypeDB::bind_method(_MD("get_default_color"), &Line2D::get_default_color);
 
-	ClassDB::bind_method(_MD("set_gradient", "color"), &Line2D::set_gradient);
-	ClassDB::bind_method(_MD("get_gradient"), &Line2D::get_gradient);
+	ObjectTypeDB::bind_method(_MD("set_gradient", "color"), &Line2D::set_gradient);
+	ObjectTypeDB::bind_method(_MD("get_gradient"), &Line2D::get_gradient);
 
-	ClassDB::bind_method(_MD("set_texture", "texture"), &Line2D::set_texture);
-	ClassDB::bind_method(_MD("get_texture"), &Line2D::get_texture);
+	ObjectTypeDB::bind_method(_MD("set_texture", "texture"), &Line2D::set_texture);
+	ObjectTypeDB::bind_method(_MD("get_texture"), &Line2D::get_texture);
 
-	ClassDB::bind_method(_MD("set_texture_mode", "mode"), &Line2D::set_texture_mode);
-	ClassDB::bind_method(_MD("get_texture_mode"), &Line2D::get_texture_mode);
+	ObjectTypeDB::bind_method(_MD("set_texture_mode", "mode"), &Line2D::set_texture_mode);
+	ObjectTypeDB::bind_method(_MD("get_texture_mode"), &Line2D::get_texture_mode);
 
-	ClassDB::bind_method(_MD("set_joint_mode", "mode"), &Line2D::set_joint_mode);
-	ClassDB::bind_method(_MD("get_joint_mode"), &Line2D::get_joint_mode);
+	ObjectTypeDB::bind_method(_MD("set_joint_mode", "mode"), &Line2D::set_joint_mode);
+	ObjectTypeDB::bind_method(_MD("get_joint_mode"), &Line2D::get_joint_mode);
 
-	ClassDB::bind_method(_MD("set_begin_cap_mode", "mode"), &Line2D::set_begin_cap_mode);
-	ClassDB::bind_method(_MD("get_begin_cap_mode"), &Line2D::get_begin_cap_mode);
+	ObjectTypeDB::bind_method(_MD("set_begin_cap_mode", "mode"), &Line2D::set_begin_cap_mode);
+	ObjectTypeDB::bind_method(_MD("get_begin_cap_mode"), &Line2D::get_begin_cap_mode);
 
-	ClassDB::bind_method(_MD("set_end_cap_mode", "mode"), &Line2D::set_end_cap_mode);
-	ClassDB::bind_method(_MD("get_end_cap_mode"), &Line2D::get_end_cap_mode);
+	ObjectTypeDB::bind_method(_MD("set_end_cap_mode", "mode"), &Line2D::set_end_cap_mode);
+	ObjectTypeDB::bind_method(_MD("get_end_cap_mode"), &Line2D::get_end_cap_mode);
 
-	ClassDB::bind_method(_MD("set_sharp_limit", "limit"), &Line2D::set_sharp_limit);
-	ClassDB::bind_method(_MD("get_sharp_limit"), &Line2D::get_sharp_limit);
+	ObjectTypeDB::bind_method(_MD("set_sharp_limit", "limit"), &Line2D::set_sharp_limit);
+	ObjectTypeDB::bind_method(_MD("get_sharp_limit"), &Line2D::get_sharp_limit);
 
-	ClassDB::bind_method(_MD("set_round_precision", "precision"), &Line2D::set_round_precision);
-	ClassDB::bind_method(_MD("get_round_precision"), &Line2D::get_round_precision);
+	ObjectTypeDB::bind_method(_MD("set_round_precision", "precision"), &Line2D::set_round_precision);
+	ObjectTypeDB::bind_method(_MD("get_round_precision"), &Line2D::get_round_precision);
 
-	ADD_PROPERTY(PropertyInfo(Variant::POOL_VECTOR2_ARRAY, "points"), _SCS("set_points"), _SCS("get_points"));
+	ADD_PROPERTY(PropertyInfo(Variant::VECTOR2_ARRAY, "points"), _SCS("set_points"), _SCS("get_points"));
 	ADD_PROPERTY(PropertyInfo(Variant::REAL, "width"), _SCS("set_width"), _SCS("get_width"));
 	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "default_color"), _SCS("set_default_color"), _SCS("get_default_color"));
 	ADD_PROPERTYNZ( PropertyInfo( Variant::OBJECT, "gradient", PROPERTY_HINT_RESOURCE_TYPE, "ColorRamp"), _SCS("set_gradient"), _SCS("get_gradient" ) );
@@ -300,7 +300,7 @@ void Line2D::_bind_methods() {
 	BIND_CONSTANT(LINE_TEXTURE_NONE);
 	BIND_CONSTANT(LINE_TEXTURE_TILE);
 
-	ClassDB::bind_method(_MD("_gradient_changed"), &Line2D::_gradient_changed);
+	ObjectTypeDB::bind_method(_MD("_gradient_changed"), &Line2D::_gradient_changed);
 
 }
 

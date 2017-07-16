@@ -1,8 +1,8 @@
 #ifndef LINE_2D_EDITOR_PLUGIN_H
 #define LINE_2D_EDITOR_PLUGIN_H
 
-#include "tools/editor/editor_plugin.h"
-#include "tools/editor/editor_node.h"
+#include "editor/editor_plugin.h"
+#include "editor/editor_node.h"
 #include "scene/2d/path_2d.h"
 #include "scene/gui/tool_button.h"
 #include "scene/gui/button_group.h"
@@ -12,7 +12,7 @@
 class CanvasItemEditor;
 
 class Line2DEditor : public HBoxContainer {
-	GDCLASS(Line2DEditor, HBoxContainer)
+	OBJ_TYPE(Line2DEditor, HBoxContainer)
 
 public:
 	bool forward_input_event(const InputEvent& p_event);
@@ -62,10 +62,10 @@ private:
 };
 
 class Line2DEditorPlugin : public EditorPlugin {
-	GDCLASS( Line2DEditorPlugin, EditorPlugin )
+	OBJ_TYPE( Line2DEditorPlugin, EditorPlugin )
 
 public:
-	virtual bool forward_canvas_input_event(const Transform2D& p_canvas_xform,const InputEvent& p_event) { return line2d_editor->forward_input_event(p_event); }
+	virtual bool forward_input_event(const InputEvent &p_event) { return line2d_editor->forward_input_event(p_event); }
 
 	virtual String get_name() const { return "Line2D"; }
 	bool has_main_screen() const { return false; }

@@ -93,6 +93,7 @@
 #include "plugins/particles_2d_editor_plugin.h"
 #include "plugins/particles_editor_plugin.h"
 #include "plugins/path_2d_editor_plugin.h"
+#include "plugins/line_2d_editor_plugin.h"
 #include "plugins/path_editor_plugin.h"
 #include "plugins/polygon_2d_editor_plugin.h"
 #include "plugins/rich_text_editor_plugin.h"
@@ -6231,6 +6232,7 @@ EditorNode::EditorNode() {
 	add_editor_plugin(memnew(PathEditorPlugin(this)));
 	add_editor_plugin(memnew(BakedLightEditorPlugin(this)));
 	add_editor_plugin(memnew(Polygon2DEditorPlugin(this)));
+	add_editor_plugin(memnew(Line2DEditorPlugin(this)));
 	add_editor_plugin(memnew(LightOccluder2DEditorPlugin(this)));
 	add_editor_plugin(memnew(NavigationPolygonEditorPlugin(this)));
 	add_editor_plugin(memnew(ColorRampEditorPlugin(this)));

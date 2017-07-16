@@ -2,7 +2,7 @@
 
 #include "canvas_item_editor_plugin.h"
 #include "os/file_access.h"
-#include "tools/editor/editor_settings.h"
+#include "editor/editor_settings.h"
 #include "os/keyboard.h"
 
 
@@ -21,13 +21,13 @@ void Line2DEditor::_notification(int p_what) {
 	switch(p_what) {
 	case NOTIFICATION_VISIBILITY_CHANGED:
 		// This widget is not a child but should have the same visibility state
-		base_hb->set_visible(is_visible());
+		base_hb->set_hidden(!is_visible());
 		break;
 	}
 }
 
 Vector2 Line2DEditor::mouse_to_local_pos(Vector2 gpoint, bool alt) {
-	Transform2D xform = canvas_item_editor->get_canvas_transform() * node->get_global_transform();
+	Matrix32 xform = canvas_item_editor->get_canvas_transform() * node->get_global_transform();
 	return !alt? canvas_item_editor->snap_point(xform.affine_inverse().xform(gpoint))
 				: node->get_global_transform().affine_inverse().xform(
 					canvas_item_editor->snap_point(
@@ -38,7 +38,7 @@ int Line2DEditor::get_point_index_at(Vector2 gpos) {
 	ERR_FAIL_COND_V(node == 0, -1);
 
 	real_t grab_treshold = EDITOR_DEF("poly_editor/point_grab_radius", 8);
-	Transform2D xform = canvas_item_editor->get_canvas_transform() * node->get_global_transform();
+	Matrix32 xform = canvas_item_editor->get_canvas_transform() * node->get_global_transform();
 
 	for(int i = 0; i < node->get_point_count(); ++i) {
 		Point2 p = xform.xform( node->get_point_pos(i) );
@@ -143,7 +143,7 @@ void Line2DEditor::_canvas_draw() {
 	if (!node->is_visible())
 		return;
 
-	Transform2D xform = canvas_item_editor->get_canvas_transform() * node->get_global_transform();
+	Matrix32 xform = canvas_item_editor->get_canvas_transform() * node->get_global_transform();
 	Ref<Texture> handle = get_icon("EditorHandle", "EditorIcons");
 	Size2 handle_size = handle->get_size();
 
@@ -185,9 +185,9 @@ void Line2DEditor::edit(Node *p_line2d) {
 }
 
 void Line2DEditor::_bind_methods() {
-	ClassDB::bind_method(_MD("_canvas_draw"), &Line2DEditor::_canvas_draw);
-	ClassDB::bind_method(_MD("_node_visibility_changed"), &Line2DEditor::_node_visibility_changed);
-	ClassDB::bind_method(_MD("_mode_selected"), &Line2DEditor::_mode_selected);
+	ObjectTypeDB::bind_method(_MD("_canvas_draw"), &Line2DEditor::_canvas_draw);
+	ObjectTypeDB::bind_method(_MD("_node_visibility_changed"), &Line2DEditor::_node_visibility_changed);
+	ObjectTypeDB::bind_method(_MD("_mode_selected"), &Line2DEditor::_mode_selected);
 }
 
 void Line2DEditor::_mode_selected(int p_mode) {
@@ -264,13 +264,16 @@ void Line2DEditorPlugin::edit(Object *p_object) {
 }
 
 bool Line2DEditorPlugin::handles(Object *p_object) const {
-	return p_object->is_class("Line2D");
+	return p_object->is_type("Line2D");
 }
 
 void Line2DEditorPlugin::make_visible(bool p_visible) {
-	line2d_editor->set_visible(p_visible);
-	if(p_visible == false)
+	if(p_visible) {
+	    line2d_editor->show();
+    } else {
+	    line2d_editor->hide();
 		line2d_editor->edit(NULL);
+    }
 }
 
 Line2DEditorPlugin::Line2DEditorPlugin(EditorNode *p_node) {

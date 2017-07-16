@@ -7,13 +7,13 @@
 
 class Line2D : public Node2D {
 
-	GDCLASS(Line2D, Node2D)
+	OBJ_TYPE(Line2D, Node2D)
 
 public:
 	Line2D();
 
-	void set_points(const PoolVector<Vector2> & p_points);
-	PoolVector<Vector2> get_points() const;
+	void set_points(const DVector<Vector2> & p_points);
+	DVector<Vector2> get_points() const;
 
 	void set_point_pos(int i, Vector2 pos);
 	Vector2 get_point_pos(int i) const;
@@ -63,7 +63,7 @@ private:
 	void _gradient_changed();
 
 private:
-	PoolVector<Vector2> _points;
+	DVector<Vector2> _points;
 	LineJointMode _joint_mode;
 	LineCapMode _begin_cap_mode;
 	LineCapMode _end_cap_mode;
