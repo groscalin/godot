@@ -28,6 +28,7 @@
 /* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                */
 /*************************************************************************/
 #include "undo_redo.h"
+#include "bind/core_bind.h"
 
 void UndoRedo::_discard_redo() {
 
@@ -98,7 +99,6 @@ void UndoRedo::create_action(const String &p_name, MergeMode p_mode) {
 }
 
 void UndoRedo::add_do_method(Object *p_object, const String &p_method, VARIANT_ARG_DECLARE) {
-
 	VARIANT_ARGPTRS
 	ERR_FAIL_COND(action_level <= 0);
 	ERR_FAIL_COND((current_action + 1) >= actions.size());
@@ -117,7 +117,6 @@ void UndoRedo::add_do_method(Object *p_object, const String &p_method, VARIANT_A
 }
 
 void UndoRedo::add_undo_method(Object *p_object, const String &p_method, VARIANT_ARG_DECLARE) {
-
 	VARIANT_ARGPTRS
 	ERR_FAIL_COND(action_level <= 0);
 	ERR_FAIL_COND((current_action + 1) >= actions.size());
@@ -293,7 +292,6 @@ void UndoRedo::_process_operation_list(List<Operation>::Element *E) {
 }
 
 void UndoRedo::redo() {
-
 	ERR_FAIL_COND(action_level > 0);
 
 	if ((current_action + 1) >= actions.size())
@@ -305,7 +303,6 @@ void UndoRedo::redo() {
 }
 
 void UndoRedo::undo() {
-
 	ERR_FAIL_COND(action_level > 0);
 	if (current_action < 0)
 		return; //nothing to redo
@@ -315,7 +312,6 @@ void UndoRedo::undo() {
 }
 
 void UndoRedo::clear_history() {
-
 	ERR_FAIL_COND(action_level > 0);
 	_discard_redo();
 
@@ -463,6 +459,88 @@ Variant UndoRedo::_add_undo_method(const Variant **p_args, int p_argcount, Varia
 	return Variant();
 }
 
+bool UndoRedo::serialize(const String &p_path) const {
+    _File* file = memnew(_File);
+    Error err = file->open(p_path, FileAccess::WRITE);
+    if (err) {
+        ERR_FAIL_V(false);
+    }
+
+    file->store_32(actions.size());
+    if (file->get_error() != OK && file->get_error() != ERR_FILE_EOF) {
+        memdelete(file);
+        return false;
+    }
+
+	for (int i = 0; i < actions.size(); i++) {
+        const Action& act = actions[i];
+        file->store_line(act.name);
+
+        file->store_32(act.do_ops.size());
+		for (const List<Operation>::Element *E = act.do_ops.front(); E; E = E->next()) {
+		    if (E->get().type == Operation::TYPE_METHOD) {//FIXME method only
+                file->store_line(E->get().name);
+                for (int p = 0; p < 2; p++) {
+                    file->store_var(E->get().args[p]);
+                }
+            }
+        }
+        file->store_32(act.undo_ops.size());
+		for (const List<Operation>::Element *E = act.undo_ops.front(); E; E = E->next()) {
+		    if (E->get().type == Operation::TYPE_METHOD) {//FIXME method only
+                file->store_line(E->get().name);
+                for (int p = 0; p < 2; p++) {
+                    file->store_var(E->get().args[p]);
+                }
+            }
+        }
+    }
+
+    file->close();
+    memdelete(file);
+    return true;
+}
+
+bool UndoRedo::deserialize(Object *p_object, const String &p_path) {
+    clear_history();
+
+    _File* file = memnew(_File);
+    Error err = file->open(p_path, FileAccess::READ);
+    if (err) {
+        ERR_FAIL_V(false);
+    }
+
+    uint32_t act_count = file->get_32();
+    if (file->get_error() != OK && file->get_error() != ERR_FILE_EOF) {
+        memdelete(file);
+        return false;
+    }
+
+	for (int i = 0; i < act_count; i++) {
+        String act_name = file->get_line();
+        create_action(act_name, MERGE_DISABLE);
+        uint32_t do_size = file->get_32();
+		for (int d = 0; d < do_size; d++) {
+            String method = file->get_line();
+            Variant p1 = file->get_var();
+            Variant p2 = file->get_var();
+	        add_do_method(p_object, method, p1, p2);
+        }
+        uint32_t undo_size = file->get_32();
+		for (int d = 0; d < undo_size; d++) {
+            String method = file->get_line();
+            Variant p1 = file->get_var();
+            Variant p2 = file->get_var();
+	        add_undo_method(p_object, method, p1, p2);
+        }
+        current_action = actions.size()-1;
+        action_level = 0;
+    }
+    file->close();
+    memdelete(file);
+    return true;
+}
+
 void UndoRedo::_bind_methods() {
 
 	ObjectTypeDB::bind_method(_MD("create_action", "name", "merge_mode"), &UndoRedo::create_action, DEFVAL(MERGE_DISABLE));
@@ -508,6 +586,9 @@ void UndoRedo::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("redo"), &UndoRedo::redo);
 	ObjectTypeDB::bind_method(_MD("get_current_action_name"), &UndoRedo::get_current_action_name);
 	ObjectTypeDB::bind_method(_MD("get_version"), &UndoRedo::get_version);
+    
+	ObjectTypeDB::bind_method(_MD("serialize", "path"), &UndoRedo::serialize);
+	ObjectTypeDB::bind_method(_MD("deserialize", "object", "path"), &UndoRedo::deserialize);
 
 	BIND_CONSTANT(MERGE_DISABLE);
 	BIND_CONSTANT(MERGE_ENDS);

@@ -123,6 +123,9 @@ public:
 	void set_method_notify_callback(MethodNotifyCallback p_method_callback, void *p_ud);
 	void set_property_notify_callback(PropertyNotifyCallback p_property_callback, void *p_ud);
 
+    bool serialize(const String &p_path) const;
+    bool deserialize(Object *p_object, const String &p_path);
+
 	UndoRedo();
 	~UndoRedo();
 };
