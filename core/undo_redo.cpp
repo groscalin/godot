@@ -31,7 +31,6 @@
 #include "bind/core_bind.h"
 
 void UndoRedo::_discard_redo() {
-
 	if (current_action == actions.size() - 1)
 		return;
 
@@ -471,6 +470,8 @@ bool UndoRedo::serialize(const String &p_path) const {
         memdelete(file);
         return false;
     }
+    file->store_32(current_action);
+    file->store_64(version);
 
 	for (int i = 0; i < actions.size(); i++) {
         const Action& act = actions[i];
@@ -515,10 +516,15 @@ bool UndoRedo::deserialize(Object *p_object, const String &p_path) {
         memdelete(file);
         return false;
     }
+    uint32_t cur_act = file->get_32();
+    uint64_t ver = file->get_64();
 
 	for (int i = 0; i < act_count; i++) {
         String act_name = file->get_line();
         create_action(act_name, MERGE_DISABLE);
+
+	    ERR_FAIL_COND_V(i+1 != actions.size(), false);
+
         uint32_t do_size = file->get_32();
 		for (int d = 0; d < do_size; d++) {
             String method = file->get_line();
@@ -533,11 +539,18 @@ bool UndoRedo::deserialize(Object *p_object, const String &p_path) {
             Variant p2 = file->get_var();
 	        add_undo_method(p_object, method, p1, p2);
         }
-        current_action = actions.size()-1;
         action_level = 0;
+        current_action = actions.size()-1;
     }
+
     file->close();
     memdelete(file);
+
+	ERR_FAIL_COND_V(act_count != actions.size(), false);
+
+    current_action = cur_act;
+    version = ver;
+
     return true;
 }
 
