@@ -549,7 +549,19 @@ void OS_Android::process_touch(int p_what, int p_pointer, const Vector<TouchPos>
 			TouchPos tp = p_points[p_pointer];
 			touch.push_back(tp);
 
-			InputEvent ev;
+            //amugana-wholetouch
+            InputEvent ev;
+            ev.type = InputEvent::MOUSE_BUTTON;
+            ev.ID = last_id++;
+            ev.mouse_button.button_index = BUTTON_LEFT;
+            ev.mouse_button.button_mask = BUTTON_MASK_LEFT;
+            ev.mouse_button.pressed = true;
+            ev.mouse_button.x = tp.pos.x;
+            ev.mouse_button.y = tp.pos.y;
+            ev.mouse_button.global_x = tp.pos.x;
+            ev.mouse_button.global_y = tp.pos.y;
+            input->parse_input_event(ev);
+
 			ev.type = InputEvent::SCREEN_TOUCH;
 			ev.ID = last_id++;
 			ev.screen_touch.index = tp.id;
@@ -564,7 +576,19 @@ void OS_Android::process_touch(int p_what, int p_pointer, const Vector<TouchPos>
 			for (int i = 0; i < touch.size(); i++) {
 				if (touch[i].id == p_pointer) {
 
-					InputEvent ev;
+                    //amugana-wholetouch
+                    InputEvent ev;
+                    ev.type = InputEvent::MOUSE_BUTTON;
+                    ev.ID = last_id++;
+                    ev.mouse_button.button_index = BUTTON_LEFT;
+                    ev.mouse_button.button_mask = BUTTON_MASK_LEFT;
+                    ev.mouse_button.pressed = false;
+                    ev.mouse_button.x = touch[i].pos.x;
+                    ev.mouse_button.y = touch[i].pos.y;
+                    ev.mouse_button.global_x = touch[i].pos.x;
+                    ev.mouse_button.global_y = touch[i].pos.y;
+                    input->parse_input_event(ev);
+
 					ev.type = InputEvent::SCREEN_TOUCH;
 					ev.ID = last_id++;
 					ev.screen_touch.index = touch[i].id;

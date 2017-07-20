@@ -230,7 +230,8 @@ void OSIPhone::mouse_button(int p_idx, int p_x, int p_y, bool p_pressed, bool p_
 
 	mouse_list.pressed[p_idx] = p_pressed;
 
-	if (p_use_as_mouse) {
+    //amugana-wholetouch
+	if (true/*p_use_as_mouse*/) {
 
 		InputEvent ev;
 		ev.type = InputEvent::MOUSE_BUTTON;
@@ -270,7 +271,8 @@ void OSIPhone::mouse_move(int p_idx, int p_prev_x, int p_prev_y, int p_x, int p_
 		queue_event(ev);
 	};
 
-	if (p_use_as_mouse) {
+    //amugana-wholetouch
+	if (true/*p_use_as_mouse*/) {
 		InputEvent ev;
 		ev.type = InputEvent::MOUSE_MOTION;
 		ev.device = 0;
@@ -376,14 +378,18 @@ void OSIPhone::finalize() {
 	memdelete(visual_server);
 	memdelete(rasterizer);
 
+#ifndef _3D_DISABLED
 	physics_server->finish();
 	memdelete(physics_server);
+#endif
 
 	physics_2d_server->finish();
 	memdelete(physics_2d_server);
 
+#ifndef _3D_DISABLED
 	spatial_sound_server->finish();
 	memdelete(spatial_sound_server);
+#endif
 
 	memdelete(input);
 

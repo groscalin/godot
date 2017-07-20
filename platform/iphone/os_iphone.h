@@ -75,12 +75,16 @@ private:
 	RasterizerGLES2 *rasterizer_gles22;
 
 	VisualServer *visual_server;
+#ifndef _3D_DISABLED
 	PhysicsServer *physics_server;
+#endif
 	Physics2DServer *physics_2d_server;
 
 	AudioServerSW *audio_server;
 	SampleManagerMallocSW *sample_manager;
+#ifndef _3D_DISABLED
 	SpatialSoundServerSW *spatial_sound_server;
+#endif
 	SpatialSound2DServerSW *spatial_sound_2d_server;
 	AudioDriverIphone *audio_driver;
 
