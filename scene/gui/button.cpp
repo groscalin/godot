@@ -55,91 +55,95 @@ Size2 Button::get_minimum_size() const {
 	return get_stylebox("normal")->get_minimum_size() + minsize;
 }
 
+void Button::draw() const {
+    RID ci = get_canvas_item();
+    Size2 size = get_size();
+    Color color;
+
+    //print_line(get_text()+": "+itos(is_flat())+" hover "+itos(get_draw_mode()));
+
+    switch (get_draw_mode()) {
+
+        case DRAW_NORMAL: {
+
+            if (!flat)
+                get_stylebox("normal")->draw(ci, Rect2(Point2(0, 0), size));
+            color = get_color("font_color");
+        } break;
+        case DRAW_PRESSED: {
+
+            get_stylebox("pressed")->draw(ci, Rect2(Point2(0, 0), size));
+            if (has_color("font_color_pressed"))
+                color = get_color("font_color_pressed");
+            else
+                color = get_color("font_color");
+
+        } break;
+        case DRAW_HOVER: {
+
+            get_stylebox("hover")->draw(ci, Rect2(Point2(0, 0), size));
+            color = get_color("font_color_hover");
+
+        } break;
+        case DRAW_DISABLED: {
+
+            get_stylebox("disabled")->draw(ci, Rect2(Point2(0, 0), size));
+            color = get_color("font_color_disabled");
+
+        } break;
+    }
+
+    if (has_focus()) {
+
+        Ref<StyleBox> style = get_stylebox("focus");
+        style->draw(ci, Rect2(Point2(), size));
+    }
+
+    Ref<StyleBox> style = get_stylebox("normal");
+    Ref<Font> font = get_font("font");
+    Ref<Texture> _icon;
+    if (icon.is_null() && has_icon("icon"))
+        _icon = Control::get_icon("icon");
+    else
+        _icon = icon;
+
+    Point2 icon_ofs = (!_icon.is_null()) ? Point2(_icon->get_width() + get_constant("hseparation"), 0) : Point2();
+    int text_clip = size.width - style->get_minimum_size().width - icon_ofs.width;
+    Point2 text_ofs = (size - style->get_minimum_size() - icon_ofs - font->get_string_size(text)) / 2.0;
+
+    switch (align) {
+        case ALIGN_LEFT: {
+            text_ofs.x = style->get_margin(MARGIN_LEFT) + icon_ofs.x;
+            text_ofs.y += style->get_offset().y;
+        } break;
+        case ALIGN_CENTER: {
+            if (text_ofs.x < 0)
+                text_ofs.x = 0;
+            text_ofs += icon_ofs;
+            text_ofs += style->get_offset();
+        } break;
+        case ALIGN_RIGHT: {
+            text_ofs.x = size.x - style->get_margin(MARGIN_RIGHT) - font->get_string_size(text).x;
+            text_ofs.y += style->get_offset().y;
+        } break;
+    }
+
+    text_ofs.y += font->get_ascent();
+    font->draw(ci, text_ofs.floor(), text, color, clip_text ? text_clip : -1);
+    if (!_icon.is_null()) {
+
+        int valign = size.height - style->get_minimum_size().y;
+
+        _icon->draw(ci, style->get_offset() + Point2(0, Math::floor((valign - _icon->get_height()) / 2.0)), is_disabled() ? Color(1, 1, 1, 0.4) : Color(1, 1, 1));
+    }
+}
+
 void Button::_notification(int p_what) {
 
 	if (p_what == NOTIFICATION_DRAW) {
+        draw();
+    }
 
-		RID ci = get_canvas_item();
-		Size2 size = get_size();
-		Color color;
-
-		//print_line(get_text()+": "+itos(is_flat())+" hover "+itos(get_draw_mode()));
-
-		switch (get_draw_mode()) {
-
-			case DRAW_NORMAL: {
-
-				if (!flat)
-					get_stylebox("normal")->draw(ci, Rect2(Point2(0, 0), size));
-				color = get_color("font_color");
-			} break;
-			case DRAW_PRESSED: {
-
-				get_stylebox("pressed")->draw(ci, Rect2(Point2(0, 0), size));
-				if (has_color("font_color_pressed"))
-					color = get_color("font_color_pressed");
-				else
-					color = get_color("font_color");
-
-			} break;
-			case DRAW_HOVER: {
-
-				get_stylebox("hover")->draw(ci, Rect2(Point2(0, 0), size));
-				color = get_color("font_color_hover");
-
-			} break;
-			case DRAW_DISABLED: {
-
-				get_stylebox("disabled")->draw(ci, Rect2(Point2(0, 0), size));
-				color = get_color("font_color_disabled");
-
-			} break;
-		}
-
-		if (has_focus()) {
-
-			Ref<StyleBox> style = get_stylebox("focus");
-			style->draw(ci, Rect2(Point2(), size));
-		}
-
-		Ref<StyleBox> style = get_stylebox("normal");
-		Ref<Font> font = get_font("font");
-		Ref<Texture> _icon;
-		if (icon.is_null() && has_icon("icon"))
-			_icon = Control::get_icon("icon");
-		else
-			_icon = icon;
-
-		Point2 icon_ofs = (!_icon.is_null()) ? Point2(_icon->get_width() + get_constant("hseparation"), 0) : Point2();
-		int text_clip = size.width - style->get_minimum_size().width - icon_ofs.width;
-		Point2 text_ofs = (size - style->get_minimum_size() - icon_ofs - font->get_string_size(text)) / 2.0;
-
-		switch (align) {
-			case ALIGN_LEFT: {
-				text_ofs.x = style->get_margin(MARGIN_LEFT) + icon_ofs.x;
-				text_ofs.y += style->get_offset().y;
-			} break;
-			case ALIGN_CENTER: {
-				if (text_ofs.x < 0)
-					text_ofs.x = 0;
-				text_ofs += icon_ofs;
-				text_ofs += style->get_offset();
-			} break;
-			case ALIGN_RIGHT: {
-				text_ofs.x = size.x - style->get_margin(MARGIN_RIGHT) - font->get_string_size(text).x;
-				text_ofs.y += style->get_offset().y;
-			} break;
-		}
-
-		text_ofs.y += font->get_ascent();
-		font->draw(ci, text_ofs.floor(), text, color, clip_text ? text_clip : -1);
-		if (!_icon.is_null()) {
-
-			int valign = size.height - style->get_minimum_size().y;
-
-			_icon->draw(ci, style->get_offset() + Point2(0, Math::floor((valign - _icon->get_height()) / 2.0)), is_disabled() ? Color(1, 1, 1, 0.4) : Color(1, 1, 1));
-		}
-	}
 }
 
 void Button::set_text(const String &p_text) {

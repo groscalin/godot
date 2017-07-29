@@ -42,6 +42,7 @@
 #include "scene/2d/path_2d.h"
 #include "scene/gui/box_container.h"
 #include "scene/gui/button.h"
+#include "scene/gui/color_button.h"
 #include "scene/gui/button_array.h"
 #include "scene/gui/button_group.h"
 #include "scene/gui/center_container.h"
@@ -56,6 +57,7 @@
 #include "scene/gui/link_button.h"
 #include "scene/gui/margin_container.h"
 #include "scene/gui/panel.h"
+#include "scene/gui/color_panel.h"
 #include "scene/gui/panel_container.h"
 #include "scene/gui/patch_9_frame.h"
 #include "scene/gui/progress_bar.h"
@@ -167,14 +169,14 @@
 #include "scene/3d/spatial.h"
 
 #include "scene/3d/visibility_notifier.h"
+#include "scene/gui/option_button.h"
+#include "scene/gui/popup_menu.h"
 
 #ifndef ADVANCED_GUI_DISABLED
 #include "scene/gui/file_dialog.h"
 #include "scene/gui/line_edit.h"
-#include "scene/gui/popup_menu.h"
 #include "scene/gui/tree.h"
 #include "scene/gui/text_edit.h"
-#include "scene/gui/option_button.h"
 #include "scene/gui/spin_box.h"
 #include "scene/gui/reference_frame.h"
 #include "scene/gui/color_picker.h"
@@ -318,6 +320,7 @@ void register_scene_types() {
 	//	ObjectTypeDB::register_type<EmptyControl>();
 	ObjectTypeDB::add_compatibility_type("EmptyControl", "Control");
 	ObjectTypeDB::register_type<Button>();
+	ObjectTypeDB::register_type<ColorButton>();
 	ObjectTypeDB::register_type<Label>();
 	ObjectTypeDB::register_type<HScrollBar>();
 	ObjectTypeDB::register_type<VScrollBar>();
@@ -331,6 +334,7 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<ToolButton>();
 	ObjectTypeDB::register_type<LinkButton>();
 	ObjectTypeDB::register_type<Panel>();
+	ObjectTypeDB::register_type<ColorPanel>();
 	ObjectTypeDB::register_type<Range>();
 
 	OS::get_singleton()->yield(); //may take time to init
@@ -371,19 +375,19 @@ void register_scene_types() {
 	ObjectTypeDB::register_type<AcceptDialog>();
 	ObjectTypeDB::register_type<ConfirmationDialog>();
 	ObjectTypeDB::register_type<RichTextLabel>();
+	ObjectTypeDB::register_type<OptionButton>();
+	ObjectTypeDB::register_type<PopupMenu>();
 
 #ifndef ADVANCED_GUI_DISABLED
 
 	ObjectTypeDB::register_type<MenuButton>();
 	ObjectTypeDB::register_type<FileDialog>();
 	ObjectTypeDB::register_type<LineEdit>();
-	ObjectTypeDB::register_type<PopupMenu>();
 	ObjectTypeDB::register_type<Tree>();
 
 	ObjectTypeDB::register_type<TextEdit>();
 
 	ObjectTypeDB::register_virtual_type<TreeItem>();
-	ObjectTypeDB::register_type<OptionButton>();
 	ObjectTypeDB::register_type<SpinBox>();
 	ObjectTypeDB::register_type<ReferenceFrame>();
 	ObjectTypeDB::register_type<ColorPicker>();

@@ -45,7 +45,7 @@ public:
 		ALIGN_RIGHT
 	};
 
-private:
+protected:
 	bool flat;
 	String text;
 	Ref<Texture> icon;
@@ -56,6 +56,8 @@ protected:
 	virtual Size2 get_minimum_size() const;
 	void _notification(int p_what);
 	static void _bind_methods();
+
+	virtual void draw() const;
 
 public:
 	//

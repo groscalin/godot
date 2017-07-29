@@ -30,7 +30,6 @@
 #include "audio_driver_iphone.h"
 
 Error AudioDriverIphone::init() {
-
 	active = false;
 	channels = 2;
 

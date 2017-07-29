@@ -208,6 +208,11 @@ void fill_default_theme(Ref<Theme> &t, const Ref<Font> &default_font, const Ref<
 
 	t->set_stylebox("panel", "Panel", make_stylebox(panel_bg_png, 0, 0, 0, 0));
 
+	// ColorPanel
+
+	t->set_stylebox("panel", "ColorPanel", make_stylebox(panel_bg_png, 0, 0, 0, 0));
+	t->set_color("color", "ColorPanel", Color::html("ffffffff"));
+
 	// Focus
 
 	Ref<StyleBoxTexture> focus = make_stylebox(focus_png, 5, 5, 5, 5);
@@ -237,6 +242,23 @@ void fill_default_theme(Ref<Theme> &t, const Ref<Font> &default_font, const Ref<
 	t->set_color("font_color_disabled", "Button", control_font_color_disabled);
 
 	t->set_constant("hseparation", "Button", 2 * scale);
+
+    // ColorButton
+	t->set_stylebox("normal", "ColorButton", sb_button_normal);
+	t->set_stylebox("pressed", "ColorButton", sb_button_pressed);
+	//t->set_stylebox("hover", "ColorButton", sb_button_hover);
+	t->set_stylebox("disabled", "ColorButton", sb_button_disabled);
+	//t->set_stylebox("focus", "ColorButton", sb_button_focus);
+	t->set_color("styblebox_color", "ColorButton", control_font_color_pressed);
+
+	t->set_font("font", "ColorButton", default_font);
+
+	t->set_color("font_color", "ColorButton", control_font_color);
+	//t->set_color("font_color_pressed", "ColorButton", control_font_color_pressed);
+	//t->set_color("font_color_hover", "ColorButton", control_font_color_hover);
+	//t->set_color("font_color_disabled", "ColorButton", control_font_color_disabled);
+
+	t->set_constant("hseparation", "ColorButton", 2 * scale);
 
 	// LinkButton
 

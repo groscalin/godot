@@ -98,6 +98,17 @@ StyleBox::StyleBox() {
 	}
 }
 
+void StyleBoxTexture::set_bg_color(const Color &p_color) {
+
+	bg_color = p_color;
+	emit_changed();
+}
+
+Color StyleBoxTexture::get_bg_color() const {
+
+	return bg_color;
+}
+
 void StyleBoxTexture::set_texture(RES p_texture) {
 
 	if (texture == p_texture)
@@ -135,7 +146,19 @@ void StyleBoxTexture::draw(RID p_canvas_item, const Rect2 &p_rect) const {
 	r.pos.y -= expand_margin[MARGIN_TOP];
 	r.size.x += expand_margin[MARGIN_LEFT] + expand_margin[MARGIN_RIGHT];
 	r.size.y += expand_margin[MARGIN_TOP] + expand_margin[MARGIN_BOTTOM];
-	VisualServer::get_singleton()->canvas_item_add_style_box(p_canvas_item, r, region_rect, texture->get_rid(), Vector2(margin[MARGIN_LEFT], margin[MARGIN_TOP]), Vector2(margin[MARGIN_RIGHT], margin[MARGIN_BOTTOM]), draw_center);
+	VisualServer::get_singleton()->canvas_item_add_style_box(p_canvas_item, r, region_rect, texture->get_rid(), Vector2(margin[MARGIN_LEFT], margin[MARGIN_TOP]), Vector2(margin[MARGIN_RIGHT], margin[MARGIN_BOTTOM]), draw_center, bg_color);
+}
+
+void StyleBoxTexture::draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const {
+	if (texture.is_null())
+		return;
+
+	Rect2 r = p_rect;
+	r.pos.x -= expand_margin[MARGIN_LEFT];
+	r.pos.y -= expand_margin[MARGIN_TOP];
+	r.size.x += expand_margin[MARGIN_LEFT] + expand_margin[MARGIN_RIGHT];
+	r.size.y += expand_margin[MARGIN_TOP] + expand_margin[MARGIN_BOTTOM];
+	VisualServer::get_singleton()->canvas_item_add_style_box(p_canvas_item, r, region_rect, texture->get_rid(), Vector2(margin[MARGIN_LEFT], margin[MARGIN_TOP]), Vector2(margin[MARGIN_RIGHT], margin[MARGIN_BOTTOM]), draw_center, p_color);
 }
 
 void StyleBoxTexture::set_draw_center(bool p_draw) {
@@ -186,6 +209,9 @@ Rect2 StyleBoxTexture::get_region_rect() const {
 
 void StyleBoxTexture::_bind_methods() {
 
+	ObjectTypeDB::bind_method(_MD("set_bg_color", "color"), &StyleBoxTexture::set_bg_color);
+	ObjectTypeDB::bind_method(_MD("get_bg_color"), &StyleBoxTexture::get_bg_color);
+
 	ObjectTypeDB::bind_method(_MD("set_texture", "texture:Texture"), &StyleBoxTexture::set_texture);
 	ObjectTypeDB::bind_method(_MD("get_texture:Texture"), &StyleBoxTexture::get_texture);
 
@@ -203,6 +229,7 @@ void StyleBoxTexture::_bind_methods() {
 
 	ADD_SIGNAL(MethodInfo("texture_changed"));
 
+	ADD_PROPERTY(PropertyInfo(Variant::COLOR, "bg_color"), _SCS("set_bg_color"), _SCS("get_bg_color"));
 	ADD_PROPERTY(PropertyInfo(Variant::OBJECT, "texture", PROPERTY_HINT_RESOURCE_TYPE, "Texture"), _SCS("set_texture"), _SCS("get_texture"));
 	ADD_PROPERTYNZ(PropertyInfo(Variant::RECT2, "region_rect"), _SCS("set_region_rect"), _SCS("get_region_rect"));
 	ADD_PROPERTYI(PropertyInfo(Variant::REAL, "margin/left", PROPERTY_HINT_RANGE, "0,2048,1"), _SCS("set_margin_size"), _SCS("get_margin_size"), MARGIN_LEFT);
@@ -223,6 +250,7 @@ StyleBoxTexture::StyleBoxTexture() {
 		expand_margin[i] = 0;
 	}
 	draw_center = true;
+	bg_color = Color(1,1,1);
 }
 StyleBoxTexture::~StyleBoxTexture() {
 }
@@ -292,6 +320,10 @@ bool StyleBoxFlat::get_draw_center() const {
 Size2 StyleBoxFlat::get_center_size() const {
 
 	return Size2();
+}
+
+void StyleBoxFlat::draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const {
+    draw(p_canvas_item, p_rect);
 }
 
 void StyleBoxFlat::draw(RID p_canvas_item, const Rect2 &p_rect) const {

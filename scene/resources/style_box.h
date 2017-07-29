@@ -56,6 +56,7 @@ public:
 	virtual Size2 get_center_size() const;
 
 	virtual void draw(RID p_canvas_item, const Rect2 &p_rect) const = 0;
+	virtual void draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const = 0;
 
 	Size2 get_minimum_size() const;
 	Point2 get_offset() const;
@@ -70,6 +71,7 @@ class StyleBoxEmpty : public StyleBox {
 
 public:
 	virtual void draw(RID p_canvas_item, const Rect2 &p_rect) const {}
+	virtual void draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const {}
 	StyleBoxEmpty() {}
 };
 
@@ -83,11 +85,16 @@ class StyleBoxTexture : public StyleBox {
 	Ref<Texture> texture;
 	bool draw_center;
 
+	Color bg_color;
+
 protected:
 	virtual float get_style_margin(Margin p_margin) const;
 	static void _bind_methods();
 
 public:
+	void set_bg_color(const Color &p_color);
+	Color get_bg_color() const;
+
 	void set_expand_margin_size(Margin p_expand_margin, float p_size);
 	float get_expand_margin_size(Margin p_expand_margin) const;
 
@@ -105,6 +112,7 @@ public:
 	virtual Size2 get_center_size() const;
 
 	virtual void draw(RID p_canvas_item, const Rect2 &p_rect) const;
+	virtual void draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const;
 
 	StyleBoxTexture();
 	~StyleBoxTexture();
@@ -147,6 +155,7 @@ public:
 	virtual Size2 get_center_size() const;
 
 	virtual void draw(RID p_canvas_item, const Rect2 &p_rect) const;
+	virtual void draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const;
 
 	StyleBoxFlat();
 	~StyleBoxFlat();
@@ -166,6 +175,7 @@ protected:
 
 public:
 	virtual void draw(RID p_canvas_item, const Rect2 &p_rect) const {}
+	virtual void draw_colored(RID p_canvas_item, const Rect2 &p_rect, const Color &p_color) const {}
 	virtual bool test_mask(const Point2 &p_point, const Rect2 &p_rect) const;
 
 	void set_image(const Image &p_image);

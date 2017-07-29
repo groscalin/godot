@@ -7,10 +7,10 @@ if (env["disable_advanced_gui"] == "yes"):
     exc = [
         "file_dialog.cpp",
         "line_edit.cpp",
-        "popup_menu.cpp",
         "tree.cpp",
         "text_edit.cpp",
-        "option_button.cpp",
+        #"popup_menu.cpp",
+        #"option_button.cpp",
         "spin_box.cpp",
         "reference_frame.cpp",
         "color_picker.cpp",
