@@ -175,6 +175,7 @@ private:
 	friend class Viewport;
 
 	SelfList<Node>::List xform_change_list;
+    bool xform_change;
 
 #ifdef DEBUG_ENABLED
 
@@ -265,6 +266,9 @@ public:
 	void set_auto_accept_quit(bool p_enable);
 
 	void quit();
+
+	void reset_changed();
+	bool has_changed();
 
 	void set_input_as_handled();
 	bool is_input_handled();

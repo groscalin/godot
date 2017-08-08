@@ -1467,7 +1467,7 @@ uint64_t Main::target_ticks = 0;
 float Main::time_accum = 0;
 uint32_t Main::frames = 0;
 uint32_t Main::frame = 0;
-bool Main::force_redraw_requested = false;
+int Main::force_redraw_requested = 0;
 
 //for performance metrics
 static uint64_t fixed_process_max = 0;
@@ -1501,6 +1501,8 @@ bool Main::iteration() {
 	bool exit = false;
 
 	int iters = 0;
+
+    SceneTree::get_singleton()->reset_changed();
 
 	while (time_accum > frame_slice) {
 
@@ -1553,14 +1555,18 @@ bool Main::iteration() {
 	if (OS::get_singleton()->can_draw()) {
 
 		if ((!force_redraw_requested) && OS::get_singleton()->is_in_low_processor_usage_mode()) {
-			if (VisualServer::get_singleton()->has_changed()) {
+			if (VisualServer::get_singleton()->has_changed() || SceneTree::get_singleton()->has_changed()) {
 				VisualServer::get_singleton()->draw(); // flush visual commands
 				OS::get_singleton()->frames_drawn++;
+                force_redraw_requested = 30;
+                //print_line("has_changed set");
 			}
 		} else {
 			VisualServer::get_singleton()->draw(); // flush visual commands
 			OS::get_singleton()->frames_drawn++;
-			force_redraw_requested = false;
+			force_redraw_requested--;// = false;
+            //if(force_redraw_requested > 0)
+            //    print_line("force_redraw_requested : " + itos(force_redraw_requested));
 		}
 	}
 
@@ -1606,8 +1612,8 @@ bool Main::iteration() {
 		frames = 0;
 	}
 
-	if (OS::get_singleton()->is_in_low_processor_usage_mode() || !OS::get_singleton()->can_draw())
-		OS::get_singleton()->delay_usec(16600); //apply some delay to force idle time (results in about 60 FPS max)
+	if (force_redraw_requested == 0 && OS::get_singleton()->is_in_low_processor_usage_mode() || !OS::get_singleton()->can_draw())
+		OS::get_singleton()->delay_usec(33333); //apply some delay to force idle time (results in about 60 FPS max)
 	else {
 		uint32_t frame_delay = OS::get_singleton()->get_frame_delay();
 		if (frame_delay)
@@ -1627,9 +1633,9 @@ bool Main::iteration() {
 	return exit;
 }
 
-void Main::force_redraw() {
+void Main::force_redraw(int cnt) {
 
-	force_redraw_requested = true;
+	force_redraw_requested = cnt;
 };
 
 void Main::cleanup() {

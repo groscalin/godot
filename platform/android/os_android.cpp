@@ -674,6 +674,7 @@ void OS_Android::set_display_size(Size2 p_size) {
 
 	default_videomode.width = p_size.x;
 	default_videomode.height = p_size.y;
+	Main::force_redraw(60);
 }
 
 void OS_Android::reload_gfx() {

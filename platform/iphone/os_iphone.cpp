@@ -512,6 +512,10 @@ String OSIPhone::get_locale() const {
 	return locale_code;
 }
 
+int OSIPhone::get_screen_dpi(int p_screen) const {
+    return 326;
+}
+
 extern bool _play_video(String p_path, float p_volume, String p_audio_track, String p_subtitle_track);
 extern bool _is_video_playing();
 extern void _pause_video();

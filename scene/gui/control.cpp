@@ -529,7 +529,6 @@ void Control::_notification(int p_notification) {
 
 		} break;
 		case NOTIFICATION_RESIZED: {
-
 			emit_signal(SceneStringNames::get_singleton()->resized);
 		} break;
 		case NOTIFICATION_DRAW: {

@@ -202,6 +202,7 @@ public:
 
 	void set_locale(String p_locale);
 	String get_locale() const;
+	int get_screen_dpi(int p_screen = 0) const;
 
 	void set_unique_ID(String p_ID);
 	String get_unique_ID() const;

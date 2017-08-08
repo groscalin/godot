@@ -490,9 +490,11 @@ void CanvasItem::_notification(int p_what) {
 
 		} break;
 		case NOTIFICATION_TRANSFORM_CHANGED: {
+			get_tree()->xform_change = true;
 
 		} break;
 		case NOTIFICATION_VISIBILITY_CHANGED: {
+			get_tree()->xform_change = true;
 
 			emit_signal(SceneStringNames::get_singleton()->visibility_changed);
 		} break;
@@ -519,6 +521,7 @@ void CanvasItem::update() {
 		return;
 
 	pending_update = true;
+    get_tree()->xform_change = true;
 
 	MessageQueue::get_singleton()->push_call(this, "_update_callback");
 }

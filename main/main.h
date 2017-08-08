@@ -45,7 +45,7 @@ class Main {
 	static float time_accum;
 	static uint32_t frames;
 	static uint32_t frame;
-	static bool force_redraw_requested;
+	static int force_redraw_requested;
 
 public:
 	static Error setup(const char *execpath, int argc, char *argv[], bool p_second_phase = true);
@@ -53,7 +53,7 @@ public:
 	static bool start();
 	static bool iteration();
 	static void cleanup();
-	static void force_redraw();
+	static void force_redraw(int cnt=1);
 };
 
 #endif

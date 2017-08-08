@@ -93,7 +93,6 @@ void SceneTree::_flush_transform_notifications() {
 
 	SelfList<Node> *n = xform_change_list.first();
 	while (n) {
-
 		Node *node = n->self();
 		SelfList<Node> *nx = n->next();
 		xform_change_list.remove(n);
@@ -500,7 +499,6 @@ bool SceneTree::idle(float p_time) {
 	//	print_line("TEXTURE RAM: "+itos(VS::get_singleton()->get_render_info(VS::INFO_TEXTURE_MEM_USED)));
 
 	root_lock++;
-
 	MainLoop::idle(p_time);
 
 	idle_process_time = p_time;
@@ -1533,6 +1531,14 @@ void SceneTree::drop_files(const Vector<String> &p_files, int p_from_screen) {
 
 	emit_signal("files_dropped", p_files, p_from_screen);
 	MainLoop::drop_files(p_files, p_from_screen);
+}
+
+void SceneTree::reset_changed() {
+    xform_change = false;
+}
+
+bool SceneTree::has_changed() {
+    return xform_change;
 }
 
 void SceneTree::_bind_methods() {
