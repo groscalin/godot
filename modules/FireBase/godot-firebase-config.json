@@ -1,0 +1,21 @@
+{
+	"AdMob" : true,
+	"Authentication" : false,
+	"Invites" : false,
+	"RemoteConfig" : false,
+	"Notification" : true,
+	"Storage" : false,
+
+	"Ads" : 
+	{
+		"BannerAd" : true,
+		"BannerGravity" : "TOP",
+		"BannerAdId" : "ca-app-pub-8038080859632550/8714444990",
+
+		"InterstitialAd" : true,
+		"InterstitialAdId" : "ca-app-pub-8038080859632550/9048475150",
+
+		"RewardedVideoAd" : true,
+		"RewardedVideoAdId" : "ca-app-pub-8038080859632550/9065798789"
+	}
+}
