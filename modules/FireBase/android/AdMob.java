@@ -161,6 +161,7 @@ public class AdMob {
 			@Override
 			public void onAdClosed() {
 				Utils.w("AdMob:Interstitial:onAdClosed");
+				Utils.callScriptFunc("AdMob_Interstitial", "closed");
 				requestNewInterstitial();
 			}
 		});
@@ -249,8 +250,10 @@ public class AdMob {
 			if (mAdView.isEnabled()) { mAdView.setEnabled(true); }
 			if (mAdView.getVisibility() == View.INVISIBLE) {
 				Utils.d("AdMob:Visiblity:On");
+				mAdView.setVisibility(View.INVISIBLE);
 				mAdView.setVisibility(View.VISIBLE);
 			}
+            mAdView.bringToFront();
 		} else {
 			if (mAdView.isEnabled()) { mAdView.setEnabled(false); }
 			if (mAdView.getVisibility() != View.INVISIBLE) {

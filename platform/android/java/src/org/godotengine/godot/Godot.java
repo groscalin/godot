@@ -90,6 +90,9 @@ import android.os.Bundle;
 import android.os.Messenger;
 import android.os.SystemClock;
 
+//Crashlytics
+import io.fabric.sdk.android.Fabric;
+import com.crashlytics.android.Crashlytics;
 
 public class Godot extends Activity implements SensorEventListener, IDownloaderClient
 {	
@@ -316,7 +319,12 @@ public class Godot extends Activity implements SensorEventListener, IDownloaderC
 			}
 		});
 	}
-	
+/*
+	public void error(final String message) {
+        //Log.d("godot", message+"\n");
+        Crashlytics.getInstance().core.logException(new Exception(message));
+	}
+*/	
 	private static Godot _self;
 	
 	public static Godot getInstance(){
@@ -435,6 +443,8 @@ public class Godot extends Activity implements SensorEventListener, IDownloaderC
 		Log.d("GODOT", "** GODOT ACTIVITY CREATED HERE ***\n");
 
 		super.onCreate(icicle);
+        Fabric.with(this, new Crashlytics());
+
 		_self = this;
 		Window window = getWindow();
 		//window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);

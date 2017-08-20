@@ -61,7 +61,7 @@ public class MessagingService extends FirebaseMessagingService {
 			Utils.d(
 			"Notification Body: " + remoteMessage.getNotification().getBody());
 
-			sendNotification(remoteMessage.getNotification().getBody(), this);
+			sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody(), this);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class MessagingService extends FirebaseMessagingService {
 		}
 	}
 
-	public static void sendNotification(String messageBody, Context context) {
+	public static void sendNotification(String title, String messageBody, Context context) {
 		Intent intent = new Intent(context, org.godotengine.godot.Godot.class);
 		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
@@ -94,7 +94,7 @@ public class MessagingService extends FirebaseMessagingService {
 
 		NotificationCompat.Builder nBuilder = new NotificationCompat.Builder(context)
 		.setSmallIcon(R.drawable.ic_stat_ic_notification)
-		.setContentTitle("FCM Message")
+		.setContentTitle(title)
 		.setContentText(messageBody)
 		.setAutoCancel(true)
 		.setSound(defaultSoundUri)

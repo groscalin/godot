@@ -1558,7 +1558,8 @@ bool Main::iteration() {
 			if (VisualServer::get_singleton()->has_changed() || SceneTree::get_singleton()->has_changed()) {
 				VisualServer::get_singleton()->draw(); // flush visual commands
 				OS::get_singleton()->frames_drawn++;
-                force_redraw_requested = 30;
+                if (OS::get_singleton()->adreno_fix)
+                    force_redraw_requested = 30;
                 //print_line("has_changed set");
 			}
 		} else {
@@ -1613,11 +1614,11 @@ bool Main::iteration() {
 	}
 
 	if (force_redraw_requested == 0 && OS::get_singleton()->is_in_low_processor_usage_mode() || !OS::get_singleton()->can_draw())
-		OS::get_singleton()->delay_usec(33333); //apply some delay to force idle time (results in about 60 FPS max)
+		OS::get_singleton()->delay_usec(16666); //apply some delay to force idle time (results in about 60 FPS max)
 	else {
-		uint32_t frame_delay = OS::get_singleton()->get_frame_delay();
-		if (frame_delay)
-			OS::get_singleton()->delay_usec(OS::get_singleton()->get_frame_delay() * 1000);
+        uint32_t frame_delay = OS::get_singleton()->get_frame_delay();
+        if(frame_delay)
+            OS::get_singleton()->delay_usec(OS::get_singleton()->get_frame_delay() * 1000);
 	}
 
 	int target_fps = OS::get_singleton()->get_target_fps();

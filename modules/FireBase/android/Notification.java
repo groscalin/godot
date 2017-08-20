@@ -78,13 +78,14 @@ public class Notification {
 		FirebaseMessaging.getInstance().subscribeToTopic(topic);
 	}
 
-	public void notifyInMins (final String message, final int mins) {
+	public void notifyInMins (final String title, final String message, final int mins) {
 		int seconds = mins * 60;
 
 		Utils.d("Setting new Job with message: " + message);
 
 		Bundle bundle = new Bundle();
 		bundle.putString("message", message);
+		bundle.putString("title", title);
 
 		Job myJob = dispatcher.newJobBuilder()
 		.setService(NotifyInTime.class)	// the JobService that will be called
@@ -94,6 +95,7 @@ public class Notification {
 		.setExtras(bundle)
 		.build();
 
+		dispatcher.cancelAll();
 		dispatcher.mustSchedule(myJob);
 	}
 

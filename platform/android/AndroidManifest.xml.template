@@ -29,11 +29,13 @@
   
 
 $$ADD_APPLICATION_CHUNKS$$
+    <meta-data android:name="io.fabric.ApiKey" android:value="4c58e730f06d44256c45d506b5944ef46561963b" />
 
     </application>
     <uses-feature android:glEsVersion="0x00020000"/>
 
 $$ADD_PERMISSION_CHUNKS$$
+<!--
 <uses-permission android:name="godot.ACCESS_CHECKIN_PROPERTIES"/>
 <uses-permission android:name="godot.ACCESS_COARSE_LOCATION"/>
 <uses-permission android:name="godot.ACCESS_FINE_LOCATION"/>
@@ -199,6 +201,7 @@ $$ADD_PERMISSION_CHUNKS$$
 <uses-permission android:name="godot.custom.17"/>
 <uses-permission android:name="godot.custom.18"/>
 <uses-permission android:name="godot.custom.19"/>
+-->
 
 <uses-sdk android:minSdkVersion="10" android:targetSdkVersion="23"/>
          

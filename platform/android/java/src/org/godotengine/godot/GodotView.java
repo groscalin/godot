@@ -52,6 +52,10 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.godotengine.godot.input.InputManagerCompat;
 import org.godotengine.godot.input.InputManagerCompat.InputDeviceListener;
+
+//Crashlytics
+import com.crashlytics.android.Crashlytics;
+
 /**
  * A simple GLSurfaceView sub-class that demonstrate how to perform
  * OpenGL ES 2.0 rendering into a GL Surface. Note the following important
@@ -228,9 +232,9 @@ public class GodotView extends GLSurfaceView implements InputDeviceListener {
   }
 
 	@Override public void onInputDeviceRemoved(int deviceId) {
-		int id = find_joy_device(deviceId);
-		joy_devices.remove(id);
-		GodotLib.joyconnectionchanged(id, false, "");
+		//int id = find_joy_device(deviceId);
+		//joy_devices.remove(id);
+		//GodotLib.joyconnectionchanged(id, false, "");
 	}
 
 	@Override public void onInputDeviceChanged(int deviceId) {
@@ -615,10 +619,14 @@ public class GodotView extends GLSurfaceView implements InputDeviceListener {
 
 
 		public void onDrawFrame(GL10 gl) {
-			GodotLib.step();
-			for(int i=0;i<Godot.singleton_count;i++) {
-				Godot.singletons[i].onGLDrawFrame(gl);
-			}
+            try {
+                GodotLib.step();
+            } catch (Exception e) {
+                Crashlytics.logException(e);
+            }
+            for(int i=0;i<Godot.singleton_count;i++) {
+                Godot.singletons[i].onGLDrawFrame(gl);
+            }
 		}
 
 		public void onSurfaceChanged(GL10 gl, int width, int height) {

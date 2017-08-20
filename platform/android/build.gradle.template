@@ -1,26 +1,33 @@
 buildscript {
 	repositories {
 		jcenter()
+        maven { url 'https://maven.fabric.io/public' }
 	}
 	dependencies {
 		classpath 'com.android.tools.build:gradle:2.3.1'
+		classpath "io.fabric.tools:gradle:1.+"
 		$$GRADLE_CLASSPATH$$
 	}
 }
 
 apply plugin: 'com.android.application'
+apply plugin: "io.fabric"
 
 allprojects {
     repositories {
     	jcenter()
-	mavenCentral()
-	$$GRADLE_REPOSITORY_URLS$$
+        mavenCentral()
+        maven { url 'https://maven.fabric.io/public' }
+        $$GRADLE_REPOSITORY_URLS$$
     }
 }
 
 dependencies {
 	//compile 'com.android.support:support-v4:23.+'  // can be removed if minSdkVersion 16 and modify DownloadNotification.java & V14CustomNotification.java
 	$$GRADLE_DEPENDENCIES$$
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+        transitive = true;
+    }
 }
 
 android {

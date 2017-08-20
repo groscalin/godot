@@ -38,6 +38,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import org.godotengine.godot.Dictionary;
 //import org.godotengine.godot.storage.Storage;
 
+
 public class FireBase extends Godot.SingletonBase {
 
 	static public Godot.SingletonBase initialize (Activity p_activity) {
@@ -299,10 +300,10 @@ public class FireBase extends Godot.SingletonBase {
 
 	/** Notification **/
 
-	public void notifyInMins (final String message, final int mins) {
+	public void notifyInMins (final String title, final String message, final int mins) {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
-				Notification.getInstance(activity).notifyInMins(message, mins);
+				Notification.getInstance(activity).notifyInMins(title, message, mins);
 			}
 		});
 	}

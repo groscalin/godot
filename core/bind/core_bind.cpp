@@ -347,6 +347,10 @@ float _OS::get_target_fps() const {
 	return OS::get_singleton()->get_target_fps();
 }
 
+String _OS::get_graphics_device() const {
+	return OS::get_singleton()->get_graphics_device();
+}
+
 void _OS::set_low_processor_usage_mode(bool p_enabled) {
 
 	OS::get_singleton()->set_low_processor_usage_mode(p_enabled);
@@ -1053,6 +1057,8 @@ void _OS::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("has_touchscreen_ui_hint"), &_OS::has_touchscreen_ui_hint);
 
 	ObjectTypeDB::bind_method(_MD("set_window_title", "title"), &_OS::set_window_title);
+
+	ObjectTypeDB::bind_method(_MD("get_graphics_device"), &_OS::get_graphics_device);
 
 	ObjectTypeDB::bind_method(_MD("set_low_processor_usage_mode", "enable"), &_OS::set_low_processor_usage_mode);
 	ObjectTypeDB::bind_method(_MD("is_in_low_processor_usage_mode"), &_OS::is_in_low_processor_usage_mode);

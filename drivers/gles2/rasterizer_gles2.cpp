@@ -10264,6 +10264,8 @@ void RasterizerGLES2::init() {
 
 #else
 
+    print_line((const char *)glGetString(GL_VENDOR));
+    print_line((const char *)glGetString(GL_RENDERER));
 	for (Set<String>::Element *E = extensions.front(); E; E = E->next()) {
 		print_line(E->get());
 	}

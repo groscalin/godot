@@ -36,6 +36,13 @@
 // For get_engine_version, could be removed if it's moved to a new Engine singleton
 #include "version.h"
 
+#ifndef GLES2_INCLUDE_H
+#include <GLES2/gl2.h>
+#else
+#include GLES2_INCLUDE_H
+#endif
+
+
 OS *OS::singleton = NULL;
 
 OS *OS::get_singleton() {
@@ -121,13 +128,18 @@ bool OS::is_keep_screen_on() const {
 	return _keep_screen_on;
 }
 
-void OS::set_low_processor_usage_mode(bool p_enabled) {
+String OS::get_graphics_device() const {
+    return (const char*)glGetString(0x1F01);//GL_RENDERER
+}
 
+void OS::set_low_processor_usage_mode(bool p_enabled) {
 	low_processor_usage_mode = p_enabled;
+    String device = get_graphics_device();
+    if (device.begins_with("Adreno")) 
+        adreno_fix = true;
 }
 
 bool OS::is_in_low_processor_usage_mode() const {
-
 	return low_processor_usage_mode;
 }
 

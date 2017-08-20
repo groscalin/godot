@@ -50,6 +50,8 @@
 #include "file_access_jandroid.h"
 #endif
 
+#include "thread_jandroid.h"
+
 int OS_Android::get_video_driver_count() const {
 
 	return 1;
@@ -127,7 +129,8 @@ void OS_Android::initialize(const VideoMode &p_desired, int p_video_driver, int 
 	if (gfx_init_func)
 		gfx_init_func(gfx_init_ud, use_gl2);
 
-	AudioDriverManagerSW::add_driver(&audio_driver_android);
+    audio_driver_android = memnew(AudioDriverOpenSL);
+	AudioDriverManagerSW::add_driver(audio_driver_android);
 
 	RasterizerGLES2 *rasterizer_gles22 = memnew(RasterizerGLES2(false, use_reload_hooks, false, use_reload_hooks));
 	if (gl_extensions)
@@ -230,6 +233,7 @@ void OS_Android::delete_main_loop() {
 void OS_Android::finalize() {
 
 	memdelete(input);
+	memdelete(audio_driver_android);
 }
 
 void OS_Android::vprint(const char *p_format, va_list p_list, bool p_stderr) {
@@ -244,6 +248,24 @@ void OS_Android::print(const char *p_format, ...) {
 	__android_log_vprint(ANDROID_LOG_INFO, "godot", p_format, argp);
 	va_end(argp);
 }
+
+void OS_Android::print_error(const char *p_function, const char *p_file, int p_line, const char *p_code, const char *p_rationale, ErrorType p_type) {
+    OS_Unix::print_error(p_function, p_file, p_line, p_code, p_rationale, p_type);
+
+    char buffer[256];
+    int n=snprintf(buffer, 255, "%s(%s:%d) %s", p_function, p_file, p_line, p_code);
+    __android_log_print(ANDROID_LOG_ERROR, "godot", buffer);
+
+	JNIEnv *env = ThreadAndroid::get_env();
+    jclass c = env->FindClass("java/lang/RuntimeException");
+    if (NULL == c) {
+        c = env->FindClass("java/lang/NullPointerException");
+    }
+    env->ThrowNew(c, buffer);
+	//if (error_func)
+	//    error_func(buffer);
+}
+
 
 void OS_Android::alert(const String &p_alert, const String &p_title) {
 
@@ -353,14 +375,14 @@ void OS_Android::main_loop_focusout() {
 
 	if (main_loop)
 		main_loop->notification(MainLoop::NOTIFICATION_WM_FOCUS_OUT);
-	audio_driver_android.set_pause(true);
+	audio_driver_android->set_pause(true);
 }
 
 void OS_Android::main_loop_focusin() {
 
 	if (main_loop)
 		main_loop->notification(MainLoop::NOTIFICATION_WM_FOCUS_IN);
-	audio_driver_android.set_pause(false);
+	audio_driver_android->set_pause(false);
 }
 
 void OS_Android::process_joy_event(OS_Android::JoystickEvent p_event) {
@@ -674,7 +696,7 @@ void OS_Android::set_display_size(Size2 p_size) {
 
 	default_videomode.width = p_size.x;
 	default_videomode.height = p_size.y;
-	Main::force_redraw(60);
+    Main::force_redraw(60);
 }
 
 void OS_Android::reload_gfx() {
@@ -817,7 +839,7 @@ String OS_Android::get_joy_guid(int p_device) const {
 	return input->get_joy_guid_remapped(p_device);
 }
 
-OS_Android::OS_Android(GFXInitFunc p_gfx_init_func, void *p_gfx_init_ud, OpenURIFunc p_open_uri_func, GetDataDirFunc p_get_data_dir_func, GetLocaleFunc p_get_locale_func, GetModelFunc p_get_model_func, GetScreenDPIFunc p_get_screen_dpi_func, ShowVirtualKeyboardFunc p_show_vk, HideVirtualKeyboardFunc p_hide_vk, SetScreenOrientationFunc p_screen_orient, GetUniqueIDFunc p_get_unique_id, GetSystemDirFunc p_get_sdir_func, VideoPlayFunc p_video_play_func, VideoIsPlayingFunc p_video_is_playing_func, VideoPauseFunc p_video_pause_func, VideoStopFunc p_video_stop_func, SetKeepScreenOnFunc p_set_keep_screen_on_func, AlertFunc p_alert_func, bool p_use_apk_expansion) {
+OS_Android::OS_Android(GFXInitFunc p_gfx_init_func, void *p_gfx_init_ud, OpenURIFunc p_open_uri_func, GetDataDirFunc p_get_data_dir_func, GetLocaleFunc p_get_locale_func, GetModelFunc p_get_model_func, GetScreenDPIFunc p_get_screen_dpi_func, ShowVirtualKeyboardFunc p_show_vk, HideVirtualKeyboardFunc p_hide_vk, SetScreenOrientationFunc p_screen_orient, GetUniqueIDFunc p_get_unique_id, GetSystemDirFunc p_get_sdir_func, VideoPlayFunc p_video_play_func, VideoIsPlayingFunc p_video_is_playing_func, VideoPauseFunc p_video_pause_func, VideoStopFunc p_video_stop_func, SetKeepScreenOnFunc p_set_keep_screen_on_func, AlertFunc p_alert_func, /*ErrorFunc p_error_func,*/ bool p_use_apk_expansion) {
 
 	use_apk_expansion = p_use_apk_expansion;
 	default_videomode.width = 800;
@@ -852,6 +874,7 @@ OS_Android::OS_Android(GFXInitFunc p_gfx_init_func, void *p_gfx_init_ud, OpenURI
 	set_screen_orientation_func = p_screen_orient;
 	set_keep_screen_on_func = p_set_keep_screen_on_func;
 	alert_func = p_alert_func;
+	//error_func = p_error_func;
 	use_reload_hooks = false;
 }
 

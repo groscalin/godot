@@ -26,6 +26,7 @@ def configure(env):
 		env.android_add_dependency("compile 'com.firebase:firebase-jobdispatcher:0.5.2'")
 
 		env.android_add_dependency("compile 'commons-codec:commons-codec:1.10'")
+		env.android_add_dependency("compile 'com.google.firebase:firebase-crash:10.0.1'")
 
 		env.android_add_java_dir("android");
 		env.android_add_res_dir("res");
@@ -33,4 +34,3 @@ def configure(env):
 		env.android_add_to_permissions("android/AndroidPermissionsChunk.xml");
 		env.android_add_default_config("minSdkVersion 15")
 		env.android_add_default_config("applicationId 'com.humblelogicgames.sudoku'")
-		env.disable_module()

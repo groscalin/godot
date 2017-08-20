@@ -303,6 +303,8 @@ public:
 	void set_keep_screen_on(bool p_enabled);
 	bool is_keep_screen_on() const;
 
+    String get_graphics_device() const;
+
 	void set_time_scale(float p_scale);
 	float get_time_scale();
 

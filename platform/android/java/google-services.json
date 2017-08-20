@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "987886034045",
+    "firebase_url": "https://sudoku-74dba.firebaseio.com",
+    "project_id": "sudoku-74dba",
+    "storage_bucket": "sudoku-74dba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:987886034045:android:674525461fd95e49",
+        "android_client_info": {
+          "package_name": "com.humblelogicgames.sudoku"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "987886034045-2ilng0ik70ficsgevs916v3m2orhj9me.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAovnzdLA7juMNbIMS1DuE84Q0t5xF7vXg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
