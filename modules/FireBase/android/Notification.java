@@ -65,8 +65,7 @@ public class Notification {
 		mFirebaseApp = firebaseApp;
 		String token = getFirebaseMessagingToken();
 
-		dispatcher =
-		new FirebaseJobDispatcher(new GooglePlayDriver(activity.getApplicationContext()));
+		dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(activity.getApplicationContext()));
 		dispatcher.cancel("firebase-notify-in-time-UID");
 
 		Utils.d("Firebase Cloud messaging token: " + token);
@@ -82,6 +81,9 @@ public class Notification {
 		int seconds = mins * 60;
 
 		Utils.d("Setting new Job with message: " + message);
+
+        if (dispatcher == null)
+            return;
 
 		Bundle bundle = new Bundle();
 		bundle.putString("message", message);
