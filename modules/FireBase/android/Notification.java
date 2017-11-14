@@ -100,6 +100,10 @@ public class Notification {
 		dispatcher.cancelAll();
 		dispatcher.mustSchedule(myJob);
 	}
+    
+	public void cancelAll () {
+		dispatcher.cancelAll();
+	}
 
 	public void sendMessage (final String data) {
 		FirebaseMessaging fm = FirebaseMessaging.getInstance();

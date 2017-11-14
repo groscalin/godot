@@ -51,7 +51,7 @@ public class FireBase extends Godot.SingletonBase {
 			"send_events",
 			"join_group", "level_up", "post_score", "content_select", "earn_currency",
 			"spend_currency", "tutorial_begin", "tutorial_complete",
-			"notifyInMins", "subscribeToTopic", "getToken", 
+			"notifyInMins", "cancelAll", "subscribeToTopic", "getToken", 
             //"invite", "getRemoteValue", "setRemoteDefaults", "setRemoteDefaultsFile", 
             "alert",
 			//"google_sign_in", "facebook_sign_in",  "anonymous_sign_in",
@@ -304,6 +304,14 @@ public class FireBase extends Godot.SingletonBase {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
 				Notification.getInstance(activity).notifyInMins(title, message, mins);
+			}
+		});
+	}
+
+	public void cancelAll () {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				Notification.getInstance(activity).cancelAll();
 			}
 		});
 	}
