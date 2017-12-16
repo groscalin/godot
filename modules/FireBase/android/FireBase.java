@@ -63,6 +63,7 @@ public class FireBase extends Godot.SingletonBase {
 			//"get_google_user", "get_facebook_user", "google_revoke_access",
 			//"facebook_revoke_access", "authConfig", 
             "show_banner_ad", "show_interstitial_ad", "show_rewarded_video",
+            "create_banner_ad",
             "request_interstitial_ad",
 			"request_rewarded_video_status", 
             //"download", "upload"
@@ -528,6 +529,13 @@ public class FireBase extends Godot.SingletonBase {
 	}
 */
 	/** AdMob **/
+	public void create_banner_ad() {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				AdMob.getInstance(activity).createBanner();
+			}
+		});
+	}
 
 	public void show_banner_ad(final boolean show) {
 		activity.runOnUiThread(new Runnable() {

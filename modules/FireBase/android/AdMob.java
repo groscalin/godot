@@ -166,7 +166,7 @@ public class AdMob {
 			}
 		});
 
-		requestNewInterstitial();
+		//requestNewInterstitial();
 	}
 
 	public void emitRewardedVideoStatus() {
@@ -227,7 +227,7 @@ public class AdMob {
 			}
 		});
 
-		requestNewRewardedVideo();
+		//requestNewRewardedVideo();
 	}
 
 	public void requestRewardedVideoStatus() {
@@ -275,6 +275,9 @@ public class AdMob {
 	private void requestNewRewardedVideo() {
 		if (AdMobConfig == null) { return; }
 
+        if (mrv == null)
+            createRewardedVideo();
+
 		AdRequest.Builder adRB = new AdRequest.Builder();
 
 		if (BuildConfig.DEBUG) {
@@ -294,6 +297,10 @@ public class AdMob {
 
 	public void requestNewInterstitial() {
         Utils.d("AdMob:Interstitial:requestNewInterstitial");
+
+        if (mInterstitialAd == null)
+            createInterstitial();
+
 		AdRequest.Builder adRB = new AdRequest.Builder();
 
 		if (BuildConfig.DEBUG) {

@@ -52,6 +52,7 @@ public class GodotPaymentV3 extends Godot.SingletonBase {
 	private Dictionary mSkuDetails = new Dictionary();
 
 	public void purchase(final String sku, final String transactionId) {
+		Log.d("GodotPaymentV3", "purchase");
 		activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -66,6 +67,7 @@ public class GodotPaymentV3 extends Godot.SingletonBase {
 	}
 
 	public GodotPaymentV3(Activity p_activity) {
+		Log.d("GodotPaymentV3", "construct");
 
 		registerClass("GodotPayments", new String[]{"purchase", "setPurchaseCallbackId", "setPurchaseValidationUrlPrefix", "setTransactionId", "getSignature", "consumeUnconsumedPurchases", "requestPurchased", "setAutoConsume", "consume", "querySkuDetails"});
 		activity = (Godot) p_activity;
@@ -151,6 +153,7 @@ public class GodotPaymentV3 extends Godot.SingletonBase {
 
 	// request purchased items are not consumed
 	public void requestPurchased() {
+		Log.d("GodotPaymentV3", "requestPurchased");
 		activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
@@ -166,16 +169,19 @@ public class GodotPaymentV3 extends Godot.SingletonBase {
 
 	// consume item automatically after purchase. default is true.
 	public void setAutoConsume(boolean autoConsume) {
+		Log.d("GodotPaymentV3", "setAutoConsume");
 		mPaymentManager.setAutoConsume(autoConsume);
 	}
 
 	// consume a specific item
 	public void consume(String sku) {
+		Log.d("GodotPaymentV3", "consume");
 		mPaymentManager.consume(sku);
 	}
 
 	// query in app item detail info
 	public void querySkuDetails(String[] list) {
+		Log.d("GodotPaymentV3", "querySkuDetails");
 		List<String> nKeys = Arrays.asList(list);
 		List<String> cKeys = Arrays.asList(mSkuDetails.get_keys());
 		ArrayList<String> fKeys = new ArrayList<String>();
