@@ -101,6 +101,9 @@ public class PaymentsManager {
 	};
 
 	public void requestPurchase(final String sku, String transactionId) {
+        if (mService == null)
+            return;
+
 		new PurchaseTask(mService, Godot.getInstance()) {
 
 			@Override
@@ -124,6 +127,9 @@ public class PaymentsManager {
 	}
 
 	public void consumeUnconsumedPurchases() {
+        if (mService == null)
+            return;
+
 		new ReleaseAllConsumablesTask(mService, activity) {
 
 			@Override
@@ -148,6 +154,9 @@ public class PaymentsManager {
 	}
 
 	public void requestPurchased() {
+        if (mService == null)
+            return;
+
 		try {
 			PaymentsCache pc = new PaymentsCache(Godot.getInstance());
 
@@ -194,6 +203,9 @@ public class PaymentsManager {
 	}
 
 	public void processPurchaseResponse(int resultCode, Intent data) {
+        if (mService == null)
+            return;
+
 		new HandlePurchaseTask(activity) {
 
 			@Override
@@ -229,6 +241,8 @@ public class PaymentsManager {
 	}
 
 	public void validatePurchase(String purchaseToken, final String sku) {
+        if (mService == null)
+            return;
 
 		new ValidateTask(activity, godotPaymentV3) {
 
@@ -267,6 +281,9 @@ public class PaymentsManager {
 	}
 
 	public void consume(final String sku) {
+        if (mService == null)
+            return;
+
 		new ConsumeTask(mService, activity) {
 
 			@Override
@@ -330,6 +347,9 @@ public class PaymentsManager {
 	}
 
 	public void querySkuDetails(final String[] list) {
+        if (mService == null)
+            return;
+
 		(new Thread(new Runnable() {
 			@Override
 			public void run() {
