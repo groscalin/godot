@@ -230,12 +230,14 @@ public class PaymentsManager {
 
 			@Override
 			protected void error(String message) {
-				godotPaymentV3.callbackFail();
+                if (godotPaymentV3 != null)
+				    godotPaymentV3.callbackFail();
 			}
 
 			@Override
 			protected void canceled() {
-				godotPaymentV3.callbackCancel();
+                if (godotPaymentV3 != null)
+                    godotPaymentV3.callbackCancel();
 			}
 		}.handlePurchaseRequest(resultCode, data);
 	}

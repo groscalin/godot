@@ -3,4 +3,4 @@
                  "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
           android:theme="@android:style/Theme.Translucent.NoTitleBar" />
           
-<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="1366980233428105"/>
+<meta-data android:name="com.facebook.sdk.ApplicationId" android:value="\ 1366980233428105"/>

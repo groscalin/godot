@@ -1,6 +1,7 @@
 package org.godotengine.godot;
 
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.share.widget.AppInviteDialog;
 import com.facebook.share.model.AppInviteContent;
 import com.facebook.FacebookSdkNotInitializedException;
@@ -29,10 +30,10 @@ public class GodotFacebook extends Godot.SingletonBase {
             @Override
             public void run() {
                 try {
-                    Log.d("godot", "GodotFacebook.init key:"+key);
+                    Log.d("godot", "GodotFacebook.init");
                     FacebookSdk.setApplicationId(key);
                     FacebookSdk.sdkInitialize(activity.getApplicationContext());                  
-                 
+                    AppEventsLogger.activateApp(activity.getApplication());
                 } catch (FacebookSdkNotInitializedException e) {
                     Log.e("godot", "Failed to initialize FacebookSdk: " + e.getMessage()); 
                 } catch (Exception e) {
