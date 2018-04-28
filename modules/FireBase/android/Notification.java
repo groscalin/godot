@@ -66,7 +66,7 @@ public class Notification {
 		String token = getFirebaseMessagingToken();
 
 		dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(activity.getApplicationContext()));
-		dispatcher.cancel("firebase-notify-in-time-UID");
+		//dispatcher.cancel("firebase-notify-in-time-UID");
 
 		Utils.d("Firebase Cloud messaging token: " + token);
 	}
@@ -92,17 +92,18 @@ public class Notification {
 		Job myJob = dispatcher.newJobBuilder()
 		.setService(NotifyInTime.class)	// the JobService that will be called
 		.setTrigger(Trigger.executionWindow(seconds, seconds+60))
-		.setTag("firebase-notify-in-time-UID") // uniquely identifies the job
-		.setReplaceCurrent(true)
+		.setTag("firebase-notify-in-time-"+String.valueOf(mins)) // uniquely identifies the job
+		//.setReplaceCurrent(true)
 		.setExtras(bundle)
 		.build();
 
-		dispatcher.cancelAll();
+		//dispatcher.cancelAll();
 		dispatcher.mustSchedule(myJob);
 	}
     
 	public void cancelAll () {
-		dispatcher.cancelAll();
+        if(dispatcher != null)
+            dispatcher.cancelAll();
 	}
 
 	public void sendMessage (final String data) {

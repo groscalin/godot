@@ -66,6 +66,7 @@ public class FireBase extends Godot.SingletonBase {
             "create_banner_ad",
             "request_interstitial_ad",
 			"request_rewarded_video_status", 
+            "set_app_mute",
             //"download", "upload"
 		});
 
@@ -576,6 +577,14 @@ public class FireBase extends Godot.SingletonBase {
 			}
 		});
 	}
+
+	public void set_app_mute (final boolean mute) {
+		activity.runOnUiThread(new Runnable() {
+			public void run() {
+				AdMob.getInstance(activity).set_app_mute(mute);
+			}
+		});
+    }
 /*
 	public void download(final String file, final String path) {
 		activity.runOnUiThread(new Runnable() {

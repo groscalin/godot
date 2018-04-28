@@ -240,6 +240,10 @@ public class AdMob {
 		if (mrv.isLoaded()) { mrv.show(); }
 		else { Utils.d("AdMob:RewardedVideo:NotLoaded"); }
 	}
+    
+	public void set_app_mute(boolean mute) {
+        MobileAds.setAppMuted(mute);
+	}
 
 	public void show_banner_ad(final boolean show) {
 		if (!isInitialized() || mAdView == null) { return; }
