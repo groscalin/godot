@@ -15,18 +15,18 @@ def configure(env):
 		#env.android_add_dependency("compile 'com.google.android.gms:play-services-auth:10.0.1'")
 		#env.android_add_dependency("compile 'com.facebook.android:facebook-android-sdk:4.18.0'")
 
-		env.android_add_dependency("compile 'com.google.firebase:firebase-ads:10.0.1'")
+		#env.android_add_dependency("compile 'com.google.firebase:firebase-ads:10.0.1'")
 		#env.android_add_dependency("compile 'com.google.firebase:firebase-auth:10.0.1'")
                 #env.android_add_dependency("compile 'com.google.firebase:firebase-core:10.0.1'")
 		#env.android_add_dependency("compile 'com.google.firebase:firebase-config:10.0.1'")
-                env.android_add_dependency("compile 'com.google.firebase:firebase-messaging:10.0.1'")
+                env.android_add_dependency("compile 'com.google.firebase:firebase-messaging:12.0.1'")
 		#env.android_add_dependency("compile 'com.google.firebase:firebase-invites:10.0.1'")
 		#env.android_add_dependency("compile 'com.google.firebase:firebase-storage:10.0.1'")
 
 		env.android_add_dependency("compile 'com.firebase:firebase-jobdispatcher:0.5.2'")
 
 		env.android_add_dependency("compile 'commons-codec:commons-codec:1.10'")
-		env.android_add_dependency("compile 'com.google.firebase:firebase-crash:10.0.1'")
+		env.android_add_dependency("compile 'com.google.firebase:firebase-crash:12.0.1'")
 
 		env.android_add_java_dir("android");
 		env.android_add_res_dir("res");

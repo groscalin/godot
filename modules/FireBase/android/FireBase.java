@@ -62,11 +62,11 @@ public class FireBase extends Godot.SingletonBase {
 			//"ask_facebook_read_permission", "ask_facebook_publish_permission",
 			//"get_google_user", "get_facebook_user", "google_revoke_access",
 			//"facebook_revoke_access", "authConfig", 
-            "show_banner_ad", "show_interstitial_ad", "show_rewarded_video",
-            "create_banner_ad",
-            "request_interstitial_ad",
-			"request_rewarded_video_status", 
-            "set_app_mute",
+            //"show_banner_ad", "show_interstitial_ad", "show_rewarded_video",
+            //"create_banner_ad",
+            //"request_interstitial_ad",
+			//"request_rewarded_video_status", 
+            //"set_app_mute",
             //"download", "upload"
 		});
 
@@ -111,12 +111,10 @@ public class FireBase extends Godot.SingletonBase {
 			Auth.getInstance(activity).init(mFirebaseApp);
 			Auth.getInstance(activity).configure(config.optString("Auth"));
 		}
-*/
 		if (config.optBoolean("AdMob", false)) {
 			Utils.d("Initializing Firebase AdMob.");
 			AdMob.getInstance(activity).init(mFirebaseApp);
 		}
-/*
 		if (config.optBoolean("Storage", false)) {
 			Utils.d("Initializing Firebase Storage.");
 			Storage.getInstance(activity).init(mFirebaseApp);
@@ -528,8 +526,10 @@ public class FireBase extends Godot.SingletonBase {
 			}
 		});
 	}
-*/
+    */
+
 	/** AdMob **/
+    /*
 	public void create_banner_ad() {
 		activity.runOnUiThread(new Runnable() {
 			public void run() {
@@ -585,6 +585,7 @@ public class FireBase extends Godot.SingletonBase {
 			}
 		});
     }
+    */
 /*
 	public void download(final String file, final String path) {
 		activity.runOnUiThread(new Runnable() {
@@ -619,7 +620,7 @@ public class FireBase extends Godot.SingletonBase {
 		// RemoteConfig.getInstance(activity).onPause();
 
 		//Auth.getInstance(activity).onPause();
-		AdMob.getInstance(activity).onPause();
+		//AdMob.getInstance(activity).onPause();
 	}
 
 	protected void onMainResume () {
@@ -627,7 +628,7 @@ public class FireBase extends Godot.SingletonBase {
 		// RemoteConfig.getInstance(activity).onResume();
 
 		//Auth.getInstance(activity).onResume();
-		AdMob.getInstance(activity).onResume();
+		//AdMob.getInstance(activity).onResume();
 	}
 
 	protected void onMainDestroy () {
@@ -635,7 +636,7 @@ public class FireBase extends Godot.SingletonBase {
 		// RemoteConfig.getInstance(activity).onStop();
 
 		//Auth.getInstance(activity).onStop();
-		AdMob.getInstance(activity).onStop();
+		//AdMob.getInstance(activity).onStop();
 		//Storage.getInstance(activity).onStop();
 	}
 
