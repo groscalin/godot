@@ -61,13 +61,13 @@ def configure(env):
         env.Append(CCFLAGS=string.split('-arch i386 -fobjc-abi-version=2 -fobjc-legacy-dispatch -fmessage-length=0 -fpascal-strings -fblocks -fasm-blocks -D__IPHONE_OS_VERSION_MIN_REQUIRED=40100 -isysroot $IPHONESDK -mios-simulator-version-min=4.3 -DCUSTOM_MATRIX_TRANSFORM_H=\\\"build/iphone/matrix4_iphone.h\\\" -DCUSTOM_VECTOR3_TRANSFORM_H=\\\"build/iphone/vector3_iphone.h\\\"'))
     elif (env["arch"] == "arm64"):  # arm64
         env["bits"] = "64"
-        env.Append(CCFLAGS=string.split('-fno-objc-arc -arch arm64 -fmessage-length=0 -fno-strict-aliasing -fdiagnostics-print-source-range-info -fdiagnostics-show-category=id -fdiagnostics-parseable-fixits -fpascal-strings -fblocks -fvisibility=hidden -MMD -MT dependencies -miphoneos-version-min=7.0 -isysroot $IPHONESDK'))
+        env.Append(CCFLAGS=string.split('-fno-objc-arc -arch arm64 -fmessage-length=0 -fno-strict-aliasing -fdiagnostics-print-source-range-info -fdiagnostics-show-category=id -fdiagnostics-parseable-fixits -fpascal-strings -fblocks -fvisibility=hidden -MMD -MT dependencies -miphoneos-version-min=8.0 -isysroot $IPHONESDK'))
         env.Append(CPPFLAGS=['-DNEED_LONG_INT'])
         env.Append(CPPFLAGS=['-DLIBYUV_DISABLE_NEON'])
     else:  # armv7
         env["arch"] = "arm"
         env["bits"] = "32"
-        env.Append(CCFLAGS=string.split('-fno-objc-arc -arch armv7 -fmessage-length=0 -fno-strict-aliasing -fdiagnostics-print-source-range-info -fdiagnostics-show-category=id -fdiagnostics-parseable-fixits -fpascal-strings -fblocks -isysroot $IPHONESDK -fvisibility=hidden -mthumb "-DIBOutlet=__attribute__((iboutlet))" "-DIBOutletCollection(ClassName)=__attribute__((iboutletcollection(ClassName)))" "-DIBAction=void)__attribute__((ibaction)" -miphoneos-version-min=7.0 -MMD -MT dependencies'))
+        env.Append(CCFLAGS=string.split('-fno-objc-arc -arch armv7 -fmessage-length=0 -fno-strict-aliasing -fdiagnostics-print-source-range-info -fdiagnostics-show-category=id -fdiagnostics-parseable-fixits -fpascal-strings -fblocks -isysroot $IPHONESDK -fvisibility=hidden -mthumb "-DIBOutlet=__attribute__((iboutlet))" "-DIBOutletCollection(ClassName)=__attribute__((iboutletcollection(ClassName)))" "-DIBAction=void)__attribute__((ibaction)" -miphoneos-version-min=8.0 -MMD -MT dependencies'))
 
     if (env["arch"] == "x86"):
         env['IPHONEPLATFORM'] = 'iPhoneSimulator'
@@ -94,7 +94,7 @@ def configure(env):
                               '-F$IPHONESDK',
                               ])
     elif (env["arch"] == "arm64"):
-        env.Append(LINKFLAGS=['-arch', 'arm64', '-Wl,-dead_strip', '-miphoneos-version-min=7.0',
+        env.Append(LINKFLAGS=['-arch', 'arm64', '-Wl,-dead_strip', '-miphoneos-version-min=8.0',
                                                 '-isysroot', '$IPHONESDK',
                                                 #'-stdlib=libc++',
                                                 '-framework', 'Foundation',
@@ -114,7 +114,7 @@ def configure(env):
                                                 '-framework', 'GameController',
                               ])
     else:
-        env.Append(LINKFLAGS=['-arch', 'armv7', '-Wl,-dead_strip', '-miphoneos-version-min=7.0',
+        env.Append(LINKFLAGS=['-arch', 'armv7', '-Wl,-dead_strip', '-miphoneos-version-min=8.0',
                                                 '-isysroot', '$IPHONESDK',
                                                 '-framework', 'Foundation',
                                                 '-framework', 'UIKit',
@@ -147,7 +147,6 @@ def configure(env):
     env.Append(CPPPATH=['$IPHONESDK/usr/include', '$IPHONESDK/System/Library/Frameworks/OpenGLES.framework/Headers', '$IPHONESDK/System/Library/Frameworks/AudioUnit.framework/Headers'])
 
     if (env["target"].startswith("release")):
-
         env.Append(CPPFLAGS=['-DNDEBUG', '-DNS_BLOCK_ASSERTIONS=1'])
         env.Append(CPPFLAGS=['-O2', '-flto', '-ftree-vectorize', '-fomit-frame-pointer', '-ffast-math', '-funsafe-math-optimizations'])
         env.Append(LINKFLAGS=['-O2', '-flto'])

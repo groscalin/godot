@@ -907,7 +907,7 @@ void OS_OSX::initialize(const VideoMode &p_desired, int p_video_driver, int p_au
 	// Don't use accumulation buffer support; it's not accelerated
 	// Aux buffers probably aren't accelerated either
 
-	unsigned int styleMask = NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | (p_desired.resizable ? NSResizableWindowMask : 0);
+	unsigned int styleMask = /*NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask*/NSWindowStyleMaskBorderless | (p_desired.resizable ? NSResizableWindowMask : 0);
 
 	window_object = [[GodotWindow alloc]
 			initWithContentRect:NSMakeRect(0, 0, p_desired.width, p_desired.height)

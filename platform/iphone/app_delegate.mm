@@ -34,6 +34,7 @@
 #include "main/main.h"
 #include "os_iphone.h"
 #include "audio_driver_iphone.h"
+#import <AVFoundation/AVFoundation.h>
 
 #ifdef MODULE_FACEBOOKSCORER_IOS_ENABLED
 #include "modules/FacebookScorer_ios/FacebookScorer.h"
@@ -45,15 +46,12 @@
 #import <AdSupport/AdSupport.h>
 #endif
 
-#ifdef MODULE_PARSE_ENABLED
-#import "FBSDKCoreKit/FBSDKCoreKit.h"
-#import <Parse/Parse.h>
-#endif
+#import "modules/GodotFacebook/ios/lib/FBSDKCoreKit.framework/Headers/FBSDKCoreKit.h"
 
 #import "GameController/GameController.h"
 
 #define kFilteringFactor 0.1
-#define kRenderingFrequency 60
+#define kRenderingFrequency 30
 #define kAccelerometerFrequency 100.0 // Hz
 
 Error _shell_open(String);
@@ -568,12 +566,18 @@ static int frame_count = 0;
 			MainLoop::NOTIFICATION_OS_MEMORY_WARNING);
 };
 
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+//- (void)applicationDidFinishLaunching:(UIApplication *)application {
 
 	printf("**************** app delegate init\n");
+
+    [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:Nil];
+
+    [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+
 	CGRect rect = [[UIScreen mainScreen] bounds];
 
-	[application setStatusBarHidden:YES withAnimation:UIStatusBarAnimationNone];
+	[application setStatusBarHidden:NO withAnimation:UIStatusBarAnimationNone];
 	// disable idle timer
 	// application.idleTimerDisabled = YES;
 
@@ -740,25 +744,15 @@ static int frame_count = 0;
 #endif
 }
 
-// For 4.2+ support
-- (BOOL)application:(UIApplication *)application
-							openURL:(NSURL *)url
-		sourceApplication:(NSString *)sourceApplication
-					 annotation:(id)annotation {
-#ifdef MODULE_PARSE_ENABLED
-	NSLog(@"Handling application openURL");
-	return
-			[[FBSDKApplicationDelegate sharedInstance] application:application
-																										 openURL:url
-																					 sourceApplication:sourceApplication
-																									annotation:annotation];
-#endif
-
-#ifdef MODULE_FACEBOOKSCORER_IOS_ENABLED
-	return [[[FacebookScorer sharedInstance] facebook] handleOpenURL:url];
-#else
-	return false;
-#endif
+	
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+		
+    return [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url
+		    sourceApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]
+		    annotation:options[UIApplicationOpenURLOptionsAnnotationKey]
+    		];
+    // Add any custom logic here.
+    //return NO;//handled;
 }
 
 - (void)application:(UIApplication *)application
