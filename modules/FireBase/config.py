@@ -1,6 +1,6 @@
 
 def can_build(plat):
-    return plat == "android"
+    return plat=="android" or plat=="iphone"
 
 def configure(env):
     if env["platform"] == "android":
@@ -33,3 +33,9 @@ def configure(env):
         env.android_add_to_permissions("android/AndroidPermissionsChunk.xml");
         env.android_add_default_config("minSdkVersion 15")
         env.android_add_default_config("applicationId 'com.humblelogicgames.sudoku'")
+
+    if env['platform'] == "iphone":
+            env.Append(CPPPATH=['modules/Firebase/ios/lib/Analytics'])
+            env.Append(FRAMEWORKPATH=['modules/Firebase/ios/lib/Analytics'])
+            env.Append(LINKFLAGS=['-ObjC', '-framework','AdSupport', '-framework', 'FirebaseAnalytics', '-framework', 'FirebaseCore', '-framework', 'FirebaseCoreDiagnostics', '-framework', 'FirebaseInstanceID', '-framework', 'FirebaseNanoPB', '-framework', 'GoogleToolboxForMac', '-framework', 'nanopb', '-framework', 'CFNetwork', '-framework', 'Security', '-framework', 'SystemConfiguration'])
+            env.Append(LIBS=['sqlite3'])

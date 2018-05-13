@@ -48,6 +48,8 @@
 
 #import "modules/GodotFacebook/ios/lib/FBSDKCoreKit.framework/Headers/FBSDKCoreKit.h"
 
+#import "modules/Firebase/ios/lib/Firebase.h"
+
 #import "GameController/GameController.h"
 
 #define kFilteringFactor 0.1
@@ -574,6 +576,8 @@ static int frame_count = 0;
     [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryAmbient error:Nil];
 
     [[FBSDKApplicationDelegate sharedInstance] application:application didFinishLaunchingWithOptions:launchOptions];
+    [FIRApp configure];
+    
 
 	CGRect rect = [[UIScreen mainScreen] bounds];
 
