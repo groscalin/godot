@@ -1157,7 +1157,7 @@ Ref<ResourceInteractiveLoader> ResourceFormatLoaderBinary::load_interactive(cons
 	FileAccess *f = FileAccess::open(p_path, FileAccess::READ, &err);
 
 	if (err != OK) {
-
+        ERR_EXPLAIN("Failed loading resource: " + p_path);
 		ERR_FAIL_COND_V(err != OK, Ref<ResourceInteractiveLoader>());
 	}
 
