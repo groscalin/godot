@@ -475,6 +475,8 @@ public class GodotAdMob extends Godot.SingletonBase
 
 	public void setMuted(boolean mute)
 	{
+        if(instance_id == 0)
+            return;
 		Log.d("godot", "AdMob: setMuted");
         MobileAds.setAppMuted(mute);
         if (mute) 
