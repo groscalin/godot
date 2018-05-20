@@ -1,5 +1,6 @@
 #include "godotAdmob.h"
 #import "app_delegate.h"
+#import <GoogleMobileAds/GADMobileAds.h>
 
 #if VERSION_MAJOR == 3
 #define CLASS_DB ClassDB
@@ -9,6 +10,7 @@
 
 
 GodotAdmob::GodotAdmob() {
+    NSLog(@"GodotAdmob construct");
     ERR_FAIL_COND(instance != NULL);
     instance = this;
     initialized = false;
@@ -18,13 +20,16 @@ GodotAdmob::~GodotAdmob() {
     instance = NULL;
 }
 
-void GodotAdmob::init(bool isReal, int instanceId) {
+void GodotAdmob::init(bool isReal, const String &appId, int instanceId) {
     if (initialized) {
         NSLog(@"GodotAdmob Module already initialized");
         return;
     }
     
     initialized = true;
+
+    NSString *appIdStr = [NSString stringWithCString:appId.utf8().get_data() encoding: NSUTF8StringEncoding];
+    [GADMobileAds configureWithApplicationID:appIdStr];
     
     banner = [AdmobBanner alloc];
     [banner initialize :isReal :instanceId];
@@ -147,4 +152,18 @@ void GodotAdmob::_bind_methods() {
     CLASS_DB::bind_method("resize",&GodotAdmob::resize);
     CLASS_DB::bind_method("getBannerWidth",&GodotAdmob::getBannerWidth);
     CLASS_DB::bind_method("getBannerHeight",&GodotAdmob::getBannerHeight);
+    CLASS_DB::bind_method("setMuted",&GodotAdmob::setMuted);
+}
+
+void GodotAdmob::setMuted(bool mute) {
+    if (!initialized) {
+        NSLog(@"GodotAdmob Module not initialized");
+        return;
+    }
+    NSLog(@"GodotAdmob setMuted");
+    [GADMobileAds sharedInstance].applicationMuted = YES;
+    if(mute)
+        [GADMobileAds sharedInstance].applicationVolume = 0.0;
+    else
+        [GADMobileAds sharedInstance].applicationVolume = 1.0;
 }

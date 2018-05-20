@@ -45,10 +45,11 @@ public class GodotAdMob extends Godot.SingletonBase
 	 * Prepare for work with AdMob
 	 * @param boolean isReal Tell if the enviroment is for real or test
 	 */
-	public void init(boolean isReal, int instance_id)
+	public void init(boolean isReal, final String appid, int instance_id)
 	{
 		this.isReal = isReal;
 		this.instance_id = instance_id;
+        MobileAds.initialize(activity, appid);
 		Log.d("godot", "AdMob: init");
 	}
 
@@ -61,7 +62,7 @@ public class GodotAdMob extends Godot.SingletonBase
 		{
 			@Override public void run()
 			{
-				MobileAds.initialize(activity);
+				//MobileAds.initialize(activity);
 				rewardedVideoAd = MobileAds.getRewardedVideoAdInstance(activity);
 				rewardedVideoAd.setRewardedVideoAdListener(new RewardedVideoAdListener()
 				{
@@ -467,8 +468,18 @@ public class GodotAdMob extends Godot.SingletonBase
 		registerClass("AdMob", new String[] {
 			"init",
 			"loadBanner", "showBanner", "hideBanner", "getBannerWidth", "getBannerHeight", "resize",
-			"loadInterstitial", "showInterstitial", "loadRewardedVideo", "showRewardedVideo"
+			"loadInterstitial", "showInterstitial", "loadRewardedVideo", "showRewardedVideo", "setMuted"
 		});
 		activity = p_activity;
+	}
+
+	public void setMuted(boolean mute)
+	{
+		Log.d("godot", "AdMob: setMuted");
+        MobileAds.setAppMuted(mute);
+        if (mute) 
+            MobileAds.setAppVolume(0.0f);
+        else
+            MobileAds.setAppVolume(1.0f);
 	}
 }

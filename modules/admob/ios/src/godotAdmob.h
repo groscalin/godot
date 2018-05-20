@@ -42,7 +42,7 @@ protected:
 
 public:
 
-    void init(bool isReal, int instanceId);
+    void init(bool isReal, const String &appId, int instanceId);
     void loadBanner(const String &bannerId, bool isOnTop);
     void showBanner();
     void hideBanner();
@@ -53,6 +53,7 @@ public:
     void showInterstitial();
     void loadRewardedVideo(const String &rewardedId);
     void showRewardedVideo();
+    void setMuted(bool mute);
 
     GodotAdmob();
     ~GodotAdmob();
