@@ -119,6 +119,7 @@ Error DynamicFontAtSize::_load() {
 		} else {
 
 			FileAccess *f = FileAccess::open(font->font_path, FileAccess::READ);
+            print_line("DynamicFont::_load "+font->font_path);
 			ERR_FAIL_COND_V(!f, ERR_CANT_OPEN);
 
 			size_t len = f->get_len();
