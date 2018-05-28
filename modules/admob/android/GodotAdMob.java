@@ -49,7 +49,7 @@ public class GodotAdMob extends Godot.SingletonBase
 	{
 		this.isReal = isReal;
 		this.instance_id = instance_id;
-        MobileAds.initialize(activity, appid);
+        //MobileAds.initialize(activity, appid);
 		Log.d("godot", "AdMob: init");
 	}
 

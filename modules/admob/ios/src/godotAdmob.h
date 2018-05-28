@@ -30,7 +30,7 @@ class GodotAdmob : public Reference {
 #endif
 
     bool initialized;
-    GodotAdmob *instance;
+    //GodotAdmob *instance;
     
     bannerPtr banner;
     interstitialPtr interstitial;

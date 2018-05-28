@@ -11,13 +11,13 @@
 
 GodotAdmob::GodotAdmob() {
     NSLog(@"GodotAdmob construct");
-    ERR_FAIL_COND(instance != NULL);
-    instance = this;
+    //ERR_FAIL_COND(instance != NULL);
+    //instance = this;
     initialized = false;
 }
 
 GodotAdmob::~GodotAdmob() {
-    instance = NULL;
+    //instance = NULL;
 }
 
 void GodotAdmob::init(bool isReal, const String &appId, int instanceId) {
