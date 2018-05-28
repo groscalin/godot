@@ -399,9 +399,12 @@ static int frame_count = 0;
 		OSIPhone::get_singleton()->set_data_dir(
 				String::utf8([documentsDirectory UTF8String]));
 
-		NSString *locale_code = [[NSLocale preferredLanguages] firstObject];
+		//NSString *locale_code = [[NSLocale preferredLanguages] firstObject];
+        NSLocale *locale = [NSLocale currentLocale];
+        NSString *localeID = locale.localeIdentifier;
+	    NSLog(@"Set Locale : %@ ", localeID);
 		OSIPhone::get_singleton()->set_locale(
-				String::utf8([locale_code UTF8String]));
+				String::utf8([localeID UTF8String]));
 
 		NSString *uuid;
 		if ([[UIDevice currentDevice]
