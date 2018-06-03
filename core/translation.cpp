@@ -1102,6 +1102,7 @@ void TranslationServer::_bind_methods() {
 	ObjectTypeDB::bind_method(_MD("remove_translation", "translation:Translation"), &TranslationServer::remove_translation);
 
 	ObjectTypeDB::bind_method(_MD("clear"), &TranslationServer::clear);
+	ObjectTypeDB::bind_method(_MD("is_valid_locale", "locale"), &TranslationServer::is_valid_locale);
 }
 
 void TranslationServer::load_translations() {
@@ -1122,4 +1123,8 @@ TranslationServer::TranslationServer() {
 	singleton = this;
 	locale = "en";
 	enabled = true;
+}
+
+bool TranslationServer::is_valid_locale(const String &p_locale) {
+	return ::is_valid_locale(p_locale);
 }

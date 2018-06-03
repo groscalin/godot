@@ -106,6 +106,8 @@ public:
 
 	void clear();
 
+	bool is_valid_locale(const String &p_locale);
+
 	void load_translations();
 
 	TranslationServer();
