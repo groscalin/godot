@@ -371,8 +371,13 @@ void OSIPhone::delete_main_loop() {
 
 void OSIPhone::finalize() {
 
+    audio_driver->finish();
+
 	if (main_loop) // should not happen?
 		memdelete(main_loop);
+
+    audio_server->finish();
+    memdelete(audio_server);
 
 	visual_server->finish();
 	memdelete(visual_server);
