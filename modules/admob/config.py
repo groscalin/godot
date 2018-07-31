@@ -4,8 +4,13 @@ def can_build(plat):
 def configure(env):
 	if (env['platform'] == 'android'):
 		env.android_add_dependency("compile 'com.google.android.gms:play-services-ads:12.0.1'")
+
 		env.android_add_dependency("compile 'com.facebook.android:audience-network-sdk:4.27.1'")
 		env.android_add_dependency("compile 'com.google.ads.mediation:facebook:4.27.1.0'")
+
+		env.android_add_dependency("compile 'com.unity3d.ads:unity-ads:2.2.1'")
+		env.android_add_dependency("compile 'com.google.ads.mediation:unity:2.2.1.0'")
+
 		env.android_add_java_dir("android")
 		env.android_add_to_manifest("android/AndroidManifestChunk.xml")
 		env.disable_module()

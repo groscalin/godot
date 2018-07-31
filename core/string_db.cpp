@@ -47,7 +47,17 @@ bool StringName::configured = false;
 
 void StringName::setup() {
 
-	ERR_FAIL_COND(configured);
+    /*  
+    Crash on android 7/8 FIXME
+        OS_Android::print_error(char const*, char const*, int, char const*, char const*, OS::ErrorType)
+        _err_print_error(char const*, char const*, int, char const*, ErrorHandlerType)
+        StringName::setup()
+        register_core_types()
+        Main::setup(char const*, int, char**, bool)
+        Java_org_godotengine_godot_GodotLib_initialize */
+
+	//ERR_FAIL_COND(configured);
+    
 	for (int i = 0; i < STRING_TABLE_LEN; i++) {
 
 		_table[i] = NULL;
