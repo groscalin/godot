@@ -194,7 +194,11 @@ public:
 		GLOBAL_LOCK_FUNCTION;
 		T::initialize_type();
 		TypeInfo *t = types.getptr(T::get_type_static());
-		ERR_FAIL_COND(!t);
+
+        //Fix for android7 crash.
+		//ERR_FAIL_COND(!t);
+        if (!t) return;
+
 		t->creation_func = &creator<T>;
 		T::register_custom_data_to_otdb();
 	}

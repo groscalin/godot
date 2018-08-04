@@ -255,13 +255,14 @@ void OS_Android::print_error(const char *p_function, const char *p_file, int p_l
     char buffer[256];
     int n=snprintf(buffer, 255, "%s(%s:%d) %s", p_function, p_file, p_line, p_code);
     __android_log_print(ANDROID_LOG_ERROR, "godot", buffer);
-
+/*
 	JNIEnv *env = ThreadAndroid::get_env();
     jclass c = env->FindClass("java/lang/RuntimeException");
     if (NULL == c) {
         c = env->FindClass("java/lang/NullPointerException");
     }
     env->ThrowNew(c, buffer);
+*/
 	//if (error_func)
 	//    error_func(buffer);
 }
