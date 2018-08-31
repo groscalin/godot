@@ -376,14 +376,16 @@ void OS_Android::main_loop_focusout() {
 
 	if (main_loop)
 		main_loop->notification(MainLoop::NOTIFICATION_WM_FOCUS_OUT);
-	audio_driver_android->set_pause(true);
+    if (audio_driver_android)
+        audio_driver_android->set_pause(true);
 }
 
 void OS_Android::main_loop_focusin() {
 
 	if (main_loop)
 		main_loop->notification(MainLoop::NOTIFICATION_WM_FOCUS_IN);
-	audio_driver_android->set_pause(false);
+    if (audio_driver_android)
+	    audio_driver_android->set_pause(false);
 }
 
 void OS_Android::process_joy_event(OS_Android::JoystickEvent p_event) {
